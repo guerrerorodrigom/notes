@@ -9,8 +9,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.rodrigoguerrero.notes.models.bottomBarItems
+import com.rodrigoguerrero.notes.ui.dimens.bottomBarElevation
 import com.rodrigoguerrero.notes.ui.theme.NotesTheme
 
 @Composable
@@ -22,7 +22,7 @@ fun MainBottomAppBar(
         modifier = modifier,
         cutoutShape = CircleShape,
         backgroundColor = MaterialTheme.colors.surface,
-        elevation = 22.dp
+        elevation = bottomBarElevation
     ) {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             bottomBarItems.forEach { item ->
