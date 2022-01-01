@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +49,7 @@ fun DrawerItem(
     ) {
         Icon(
             imageVector = drawerMenuItem.icon,
+            tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
             contentDescription = stringResource(drawerMenuItem.title),
             modifier = Modifier
                 .align(Alignment.CenterVertically)
@@ -58,7 +57,7 @@ fun DrawerItem(
         )
         Text(
             text = stringResource(drawerMenuItem.title),
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.body1
         )
     }
 }
