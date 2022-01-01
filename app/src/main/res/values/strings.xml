@@ -13,4 +13,8 @@
   <string name="your_notebooks">Your Notebooks</string>
   <string name="notebooks">Notebooks</string>
   <string name="create_new_note">Create new note</string>
+  <string name="back_to_main_screen">Back to main screen</string>
+  <string name="back">Back</string>
+  <string name="pin_note">Pin note</string>
+  <string name="add_reminder">Add Reminder</string>
 </resources>

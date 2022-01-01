@@ -15,7 +15,7 @@ fun MainTopBar(
     onNavigationIconClicked: () -> Unit,
     onSortNotesClicked: () -> Unit,
     onListGridClicked: () -> Unit,
-    onMoreClicked: () -> Unit
+    onMoreClicked: () -> Unit,
 ) {
     var listModeIcon by remember { mutableStateOf(Icons.Filled.ViewList) }
     TopAppBar(
@@ -50,13 +50,13 @@ fun MainTopBar(
 
 @Preview
 @Composable
-fun PreviewTopBar() {
+fun PreviewMainTopBar() {
     NotesTheme {
         MainTopBar(
             onListGridClicked = {},
             onMoreClicked = {},
             onNavigationIconClicked = {},
-            onSortNotesClicked = {}
+            onSortNotesClicked = {},
         )
     }
 }

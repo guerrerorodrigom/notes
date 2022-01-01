@@ -6,15 +6,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.rodrigoguerrero.notes.ui.MainDestinations.ALL_NOTES
 import com.rodrigoguerrero.notes.ui.MainDestinations.ARCHIVE
+import com.rodrigoguerrero.notes.ui.MainDestinations.DEFAULT
 import com.rodrigoguerrero.notes.ui.MainDestinations.DELETED
 import com.rodrigoguerrero.notes.ui.MainDestinations.NOTEBOOKS
 import com.rodrigoguerrero.notes.ui.MainDestinations.SETTINGS
 import com.rodrigoguerrero.notes.ui.MainDestinations.TAGS
+import com.rodrigoguerrero.notes.ui.SecondaryDestinations.CREATE_TEXT_NOTE
 
 @Composable
 fun NotesGraph(
     navController: NavHostController,
-    startDestination: String = ALL_NOTES
+    startDestination: String = DEFAULT
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(ALL_NOTES) {
@@ -34,6 +36,9 @@ fun NotesGraph(
         }
         composable(SETTINGS) {
             SettingsScreen()
+        }
+        composable(CREATE_TEXT_NOTE) {
+            CreateNoteScreen()
         }
     }
 }
