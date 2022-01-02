@@ -38,7 +38,7 @@ fun NotesGraph(
             SettingsScreen()
         }
         composable(CREATE_TEXT_NOTE) {
-            CreateNoteScreen()
+            CreateNoteScreenContent()
         }
     }
 }

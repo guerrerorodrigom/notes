@@ -15,10 +15,8 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.ui.MainDestinations.DEFAULT
 import com.rodrigoguerrero.notes.ui.SecondaryDestinations
-import com.rodrigoguerrero.notes.ui.components.CreateNoteTopBarUi
-import com.rodrigoguerrero.notes.ui.components.MainBottomAppBar
-import com.rodrigoguerrero.notes.ui.components.MainDrawerMenu
-import com.rodrigoguerrero.notes.ui.components.MainTopBar
+import com.rodrigoguerrero.notes.ui.components.*
+import com.rodrigoguerrero.notes.ui.dimens.topBarElevation
 import com.rodrigoguerrero.notes.ui.theme.NotesTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -33,6 +31,20 @@ fun NotesApp() {
                 val scaffoldState = rememberScaffoldState()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route ?: DEFAULT
+                var screen: Screen = getScreen(
+                    currentRoute,
+                    navController,
+                    scope,
+                    scaffoldState.drawerState
+                )
+                navController.addOnDestinationChangedListener { controller, destination, arguments ->
+                    screen = getScreen(
+                        destination.route ?: DEFAULT,
+                        navController,
+                        scope,
+                        scaffoldState.drawerState
+                    )
+                }
 
                 Scaffold(
                     scaffoldState = scaffoldState,
@@ -54,11 +66,12 @@ fun NotesApp() {
                     isFloatingActionButtonDocked = true,
                     floatingActionButtonPosition = FabPosition.End,
                     topBar = {
-                        RenderTopAppBar(
-                            currentDestination = currentRoute,
-                            navController = navController,
-                            scope = scope,
-                            drawerState = scaffoldState.drawerState
+                        TopAppBar(
+                            elevation = topBarElevation,
+                            title = { screen.ScreenTitle() },
+                            backgroundColor = MaterialTheme.colors.primarySurface,
+                            navigationIcon = { screen.TopAppBarNavigationIcon() },
+                            actions = { screen.TopAppBarActions() }
                         )
                     },
                     bottomBar = {
@@ -87,18 +100,20 @@ fun NotesApp() {
     }
 }
 
-@Composable
-private fun RenderTopAppBar(
+private fun getScreen(
     currentDestination: String,
     navController: NavHostController,
     scope: CoroutineScope,
     drawerState: DrawerState
-) {
-    when (currentDestination) {
-        SecondaryDestinations.CREATE_TEXT_NOTE -> CreateNoteTopBarUi {
-            navController.popBackStack()
-        }
-        else -> MainTopBar(
+): Screen {
+    return when (currentDestination) {
+        SecondaryDestinations.CREATE_TEXT_NOTE -> CreateNoteScreen(
+            onBackPressed = { navController.popBackStack() },
+            onAddNotificationClicked = {},
+            onPinNoteClicked = {},
+            onMoreClicked = {}
+        )
+        else -> MainScreen(
             onNavigationIconClicked = {
                 scope.launch {
                     drawerState.open()
