@@ -11,4 +11,10 @@ interface Screen {
 
     @Composable
     fun ScreenTitle()
+
+    @Composable
+    fun Fab()
+
+    @Composable
+    fun BottomAppBar()
 }

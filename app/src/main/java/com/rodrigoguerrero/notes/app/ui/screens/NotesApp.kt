@@ -49,21 +49,7 @@ fun NotesApp() {
 
                 Scaffold(
                     scaffoldState = scaffoldState,
-                    floatingActionButton = {
-                        if (navController.previousBackStackEntry == null) {
-                            FloatingActionButton(
-                                onClick = { navController.navigate(CREATE_TEXT_NOTE) },
-                                contentColor = MaterialTheme.colors.onSurface
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.AddCircleOutline,
-                                    contentDescription = stringResource(
-                                        R.string.create_new_note
-                                    )
-                                )
-                            }
-                        }
-                    },
+                    floatingActionButton = { screen.Fab() },
                     isFloatingActionButtonDocked = true,
                     floatingActionButtonPosition = FabPosition.End,
                     topBar = {
@@ -75,11 +61,7 @@ fun NotesApp() {
                             actions = { screen.TopAppBarActions() }
                         )
                     },
-                    bottomBar = {
-                        if (navController.previousBackStackEntry == null) {
-                            MainBottomAppBar(onBottomAppIconClicked = {})
-                        }
-                    },
+                    bottomBar = { screen.BottomAppBar() },
                     drawerContent = {
                         MainDrawerMenu(
                             onNavigateFromMenu = { destination ->

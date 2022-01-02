@@ -1,20 +1,22 @@
 package com.rodrigoguerrero.notes.app.ui.screens
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import com.rodrigoguerrero.notes.R
+import com.rodrigoguerrero.notes.app.ui.components.MainBottomAppBar
 import com.rodrigoguerrero.notes.common.ui.Screen
+import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations
 
 class MainScreen(
     private val onNavigationIconClicked: () -> Unit,
     private val onSortNotesClicked: () -> Unit,
     private val onListGridClicked: () -> Unit,
     private val onMoreClicked: () -> Unit,
+    private val onFabClicked: () -> Unit,
+    private val onBottomAppIconClicked: (String) -> Unit
 ) : Screen {
 
     @Composable
@@ -49,5 +51,25 @@ class MainScreen(
     @Composable
     override fun ScreenTitle() {
         Text(text = stringResource(R.string.main_top_bar_title))
+    }
+
+    @Composable
+    override fun Fab() {
+        FloatingActionButton(
+            onClick = { onFabClicked() },
+            contentColor = MaterialTheme.colors.onSurface
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AddCircleOutline,
+                contentDescription = stringResource(
+                    R.string.create_new_note
+                )
+            )
+        }
+    }
+
+    @Composable
+    override fun BottomAppBar() {
+        MainBottomAppBar(onBottomAppIconClicked = onBottomAppIconClicked)
     }
 }

@@ -1,10 +1,12 @@
 package com.rodrigoguerrero.notes.creation.ui.components
 
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.Screen
@@ -13,7 +15,8 @@ class CreateNoteScreen(
     private val onBackPressed: () -> Unit,
     private val onPinNoteClicked: () -> Unit,
     private val onAddNotificationClicked: () -> Unit,
-    private val onMoreClicked: () -> Unit
+    private val onMoreClicked: () -> Unit,
+    private val onFabClicked: () -> Unit
 ) : Screen {
     @Composable
     override fun TopAppBarActions() {
@@ -37,6 +40,24 @@ class CreateNoteScreen(
 
     @Composable
     override fun ScreenTitle() {
+
+    }
+
+    @Composable
+    override fun Fab() {
+        FloatingActionButton(
+            onClick = { onFabClicked() },
+            contentColor = MaterialTheme.colors.onSurface
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Save,
+                contentDescription = stringResource(R.string.save_note)
+            )
+        }
+    }
+
+    @Composable
+    override fun BottomAppBar() {
 
     }
 }

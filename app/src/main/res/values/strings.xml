@@ -17,4 +17,7 @@
   <string name="back">Back</string>
   <string name="pin_note">Pin note</string>
   <string name="add_reminder">Add Reminder</string>
+  <string name="note_title_placeholder">Title</string>
+  <string name="note_content_placeholder">Add your note here...</string>
+  <string name="save_note">Save Note</string>
 </resources>

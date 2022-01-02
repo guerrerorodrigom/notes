@@ -3,6 +3,7 @@ package com.rodrigoguerrero.notes.app.ui.screens
 import androidx.compose.material.DrawerState
 import androidx.navigation.NavHostController
 import com.rodrigoguerrero.notes.common.ui.Screen
+import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CREATE_TEXT_NOTE
 import com.rodrigoguerrero.notes.creation.ui.components.CreateNoteScreen
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +20,8 @@ fun getScreen(
             onBackPressed = { navController.popBackStack() },
             onAddNotificationClicked = {},
             onPinNoteClicked = {},
-            onMoreClicked = {}
+            onMoreClicked = {},
+            onFabClicked = {}
         )
         else -> MainScreen(
             onNavigationIconClicked = {
@@ -29,7 +31,9 @@ fun getScreen(
             },
             onSortNotesClicked = { /*TODO*/ },
             onListGridClicked = { /*TODO*/ },
-            onMoreClicked = {}
+            onMoreClicked = {},
+            onFabClicked = { navController.navigate(CREATE_TEXT_NOTE) },
+            onBottomAppIconClicked = { }
         )
     }
 }
