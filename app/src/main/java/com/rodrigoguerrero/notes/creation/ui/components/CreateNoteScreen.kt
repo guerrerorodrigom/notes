@@ -7,17 +7,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.Screen
+import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
 
 class CreateNoteScreen(
     private val onBackPressed: () -> Unit,
     private val onPinNoteClicked: () -> Unit,
     private val onAddNotificationClicked: () -> Unit,
     private val onMoreClicked: () -> Unit,
-    private val onFabClicked: () -> Unit
+    private val viewModel: CreateNoteViewModel
 ) : Screen {
+
     @Composable
     override fun TopAppBarActions() {
         IconButton(onClick = onPinNoteClicked) {
@@ -45,14 +49,20 @@ class CreateNoteScreen(
 
     @Composable
     override fun Fab() {
-        FloatingActionButton(
-            onClick = { onFabClicked() },
-            contentColor = MaterialTheme.colors.onSurface
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Save,
-                contentDescription = stringResource(R.string.save_note)
-            )
+        val isFabEnabled by viewModel.isFabEnabled.collectAsState(false)
+
+        if (isFabEnabled) {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.createNote()
+                },
+                contentColor = MaterialTheme.colors.onSurface
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Save,
+                    contentDescription = stringResource(R.string.save_note)
+                )
+            }
         }
     }
 

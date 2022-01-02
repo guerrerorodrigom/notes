@@ -1,25 +1,21 @@
 package com.rodrigoguerrero.notes.app.ui.screens
 
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.DEFAULT
 import com.rodrigoguerrero.notes.app.navigation.NotesGraph
-import com.rodrigoguerrero.notes.app.ui.components.MainBottomAppBar
+import com.rodrigoguerrero.notes.app.theme.NotesTheme
 import com.rodrigoguerrero.notes.app.ui.components.MainDrawerMenu
 import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.common.ui.topBarElevation
-import com.rodrigoguerrero.notes.app.theme.NotesTheme
-import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CREATE_TEXT_NOTE
+import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,18 +28,23 @@ fun NotesApp() {
                 val scaffoldState = rememberScaffoldState()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route ?: DEFAULT
+                val createNoteViewModel: CreateNoteViewModel = hiltViewModel()
+
                 var screen: Screen = getScreen(
                     currentRoute,
                     navController,
                     scope,
-                    scaffoldState.drawerState
+                    scaffoldState.drawerState,
+                    createNoteViewModel
                 )
+
                 navController.addOnDestinationChangedListener { controller, destination, arguments ->
                     screen = getScreen(
                         destination.route ?: DEFAULT,
                         navController,
                         scope,
-                        scaffoldState.drawerState
+                        scaffoldState.drawerState,
+                        createNoteViewModel
                     )
                 }
 
@@ -76,7 +77,10 @@ fun NotesApp() {
                         )
                     }
                 ) {
-                    NotesGraph(navController = navController)
+                    NotesGraph(
+                        navController = navController,
+                        createNoteViewModel = createNoteViewModel
+                    )
                 }
             }
         }

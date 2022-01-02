@@ -1,7 +1,13 @@
 package com.rodrigoguerrero.notes.common.models
 
+import java.util.*
+
 data class Note(
-    val id: String,
-    val title: String,
-    val content: String
+    val id: UUID,
+    val title: String? = null,
+    val content: String,
+    val createdDate: Long,
+    val modifiedDate: Long,
+    val isHidden: Boolean,
+    val isArchived: Boolean
 )

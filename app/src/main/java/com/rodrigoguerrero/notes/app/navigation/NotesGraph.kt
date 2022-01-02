@@ -14,6 +14,7 @@ import com.rodrigoguerrero.notes.app.navigation.MainDestinations.TAGS
 import com.rodrigoguerrero.notes.configuration.ui.screens.SettingsScreen
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CREATE_TEXT_NOTE
 import com.rodrigoguerrero.notes.creation.ui.screens.CreateNoteScreenContent
+import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
 import com.rodrigoguerrero.notes.display.ui.screens.ArchiveScreen
 import com.rodrigoguerrero.notes.display.ui.screens.DeletedScreen
 import com.rodrigoguerrero.notes.display.ui.screens.NotesListScreen
@@ -23,6 +24,7 @@ import com.rodrigoguerrero.notes.ui.screens.*
 @Composable
 fun NotesGraph(
     navController: NavHostController,
+    createNoteViewModel: CreateNoteViewModel,
     startDestination: String = DEFAULT
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
@@ -45,7 +47,9 @@ fun NotesGraph(
             SettingsScreen()
         }
         composable(CREATE_TEXT_NOTE) {
-            CreateNoteScreenContent()
+            CreateNoteScreenContent(createNoteViewModel) {
+                navController.popBackStack()
+            }
         }
     }
 }

@@ -1,33 +1,53 @@
 package com.rodrigoguerrero.notes.creation.ui.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.rodrigoguerrero.notes.R
+import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun CreateNoteScreenContent() {
-    Surface {
+fun CreateNoteScreenContent(
+    viewModel: CreateNoteViewModel,
+    onNavigateBack: () -> Unit
+) {
+    val showProgress by viewModel.processingState().collectAsState(false)
+    val isNoteSaved by viewModel.processingState().collectAsState(false)
 
+    if (isNoteSaved) {
+        onNavigateBack()
+    }
+
+    Surface {
         Column(
             modifier = Modifier.fillMaxHeight()
         ) {
-            var title by remember { mutableStateOf("") }
-            var content by remember { mutableStateOf("") }
+            val title by viewModel.title.collectAsState()
+            val content by viewModel.content.collectAsState()
+            val scope = rememberCoroutineScope()
 
             TextField(
                 value = title,
-                onValueChange = { title = it },
+                onValueChange = {
+                    scope.launch {
+                        viewModel.title.value = it
+                    }
+                },
                 singleLine = true,
                 textStyle = MaterialTheme.typography.h6,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -49,14 +69,19 @@ fun CreateNoteScreenContent() {
 
             TextField(
                 value = content,
-                onValueChange = { content = it },
+                onValueChange = {
+                    scope.launch {
+                        viewModel.content.value = it
+                    }
+                },
                 singleLine = false,
                 textStyle = MaterialTheme.typography.subtitle1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .padding(0.dp),
+                    .padding(0.dp)
+                    .navigationBarsWithImePadding(),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
@@ -71,10 +96,21 @@ fun CreateNoteScreenContent() {
             )
         }
     }
+    if (showProgress) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White.copy(0.75f)),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+    }
 }
 
 @Preview
 @Composable
 fun PreviewCreateNoteScreen() {
-    CreateNoteScreenContent()
+    CreateNoteScreenContent(hiltViewModel()) {}
 }

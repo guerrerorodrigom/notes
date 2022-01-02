@@ -11,10 +11,10 @@ import java.util.*
 interface TextNotesDao {
 
     @Query("SELECT * FROM text_notes ORDER BY dateCreated DESC")
-    suspend fun getAll(): Flow<List<TextNoteEntity>>
+    fun getAll(): Flow<List<TextNoteEntity>>
 
     @Query("SELECT * FROM text_notes WHERE id=:id")
-    suspend fun getNote(id: UUID): Flow<TextNoteEntity>
+    fun getNote(id: UUID): Flow<TextNoteEntity>
 
     @Insert
     suspend fun insertNote(note: TextNoteEntity)
