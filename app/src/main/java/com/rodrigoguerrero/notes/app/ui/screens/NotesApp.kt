@@ -1,9 +1,12 @@
 package com.rodrigoguerrero.notes.app.ui.screens
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -76,11 +79,13 @@ fun NotesApp() {
                             currentRoute = currentRoute,
                         )
                     }
-                ) {
-                    NotesGraph(
-                        navController = navController,
-                        createNoteViewModel = createNoteViewModel
-                    )
+                ) { padding ->
+                    Box(modifier = Modifier.padding(padding)) {
+                        NotesGraph(
+                            navController = navController,
+                            createNoteViewModel = createNoteViewModel
+                        )
+                    }
                 }
             }
         }

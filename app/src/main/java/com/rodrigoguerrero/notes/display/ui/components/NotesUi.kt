@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.rodrigoguerrero.notes.common.ui.cardElevation
 import com.rodrigoguerrero.notes.common.ui.padding16
+import com.rodrigoguerrero.notes.common.ui.padding4
 import com.rodrigoguerrero.notes.common.ui.padding8
 
 @ExperimentalMaterialApi
@@ -24,7 +25,7 @@ fun TextNoteCard(
 ) {
     Card(
         modifier = modifier
-            .padding(padding16)
+            .padding(horizontal = padding16, vertical = padding4)
             .fillMaxWidth(),
         elevation = cardElevation,
         onClick = {}

@@ -26,8 +26,8 @@ fun CreateNoteScreenContent(
     viewModel: CreateNoteViewModel,
     onNavigateBack: () -> Unit
 ) {
-    val showProgress by viewModel.processingState().collectAsState(false)
-    val isNoteSaved by viewModel.processingState().collectAsState(false)
+    val showProgress by viewModel.processing.collectAsState(false)
+    val isNoteSaved by viewModel.successState.collectAsState(false)
 
     if (isNoteSaved) {
         onNavigateBack()
