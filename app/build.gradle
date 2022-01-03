@@ -66,6 +66,8 @@ dependencies {
   implementation "androidx.compose.material:material-icons-extended:$compose_version"
   implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
   implementation "com.google.accompanist:accompanist-insets:0.16.0"
+  implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+  implementation "com.airbnb.android:lottie-compose:4.2.1"
 
   implementation "androidx.room:room-runtime:2.4.0"
   implementation "androidx.room:room-ktx:2.4.0"

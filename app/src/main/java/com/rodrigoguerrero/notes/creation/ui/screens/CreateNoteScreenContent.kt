@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.rodrigoguerrero.notes.R
+import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
 import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
 import kotlinx.coroutines.launch
 
@@ -97,15 +98,7 @@ fun CreateNoteScreenContent(
         }
     }
     if (showProgress) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White.copy(0.75f)),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator()
-        }
+        FulLScreenProgress()
     }
 }
 

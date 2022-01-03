@@ -21,6 +21,7 @@ import com.rodrigoguerrero.notes.common.ui.topBarElevation
 import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
 import kotlinx.coroutines.launch
 
+@ExperimentalMaterialApi
 @Composable
 fun NotesApp() {
     NotesTheme {
@@ -92,6 +93,7 @@ fun NotesApp() {
     }
 }
 
+@ExperimentalMaterialApi
 @Preview
 @Composable
 fun PreviewNotesApp() {

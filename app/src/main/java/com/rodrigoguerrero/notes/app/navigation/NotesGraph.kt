@@ -1,5 +1,6 @@
 package com.rodrigoguerrero.notes.app.navigation
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -21,6 +22,7 @@ import com.rodrigoguerrero.notes.display.ui.screens.NotesListScreen
 import com.rodrigoguerrero.notes.tags.ui.screens.TagsScreen
 import com.rodrigoguerrero.notes.ui.screens.*
 
+@ExperimentalMaterialApi
 @Composable
 fun NotesGraph(
     navController: NavHostController,
