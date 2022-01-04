@@ -31,18 +31,17 @@ fun NotesListScreen(
     viewModel: NoteListViewModel
 ) {
     val notes: List<Note> by viewModel.notes.collectAsState(initial = emptyList())
-    val isLoading by viewModel.isLoading.observeAsState(true)
+    val isLoading by viewModel.isLoading.collectAsState(true)
     val isEmpty by viewModel.isEmpty.observeAsState(false)
     val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.create_note))
     val lottieProgress by animateLottieCompositionAsState(
         composition = lottieComposition,
         iterations = LottieConstants.IterateForever
     )
-    val isListMode by viewModel.isListMode.observeAsState(true)
+    val isListMode by viewModel.isListMode.collectAsState(true)
 
     when {
-        isLoading ->
-            FulLScreenProgress()
+        isLoading -> FulLScreenProgress()
         isEmpty -> FullScreenLottie(composition = lottieComposition, progress = lottieProgress)
         isListMode -> NotesList(notes)
         !isListMode -> NotesGrid(notes)

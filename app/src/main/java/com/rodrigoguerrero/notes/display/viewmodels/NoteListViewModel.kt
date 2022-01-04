@@ -7,29 +7,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rodrigoguerrero.notes.display.repository.NoteDisplayRepository
+import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
-    private val noteDisplayRepository: NoteDisplayRepository
+    private val noteDisplayRepository: NoteDisplayRepository,
+    private val notesDataStoreManager: NotesDataStoreManager
 ) : ViewModel() {
-
-    private val _isListMode = MutableLiveData<Boolean>()
-    val isListMode: LiveData<Boolean>
-        get() = _isListMode
 
     private val _listModeIcon = MutableLiveData<ImageVector>()
     val listModeIcon: LiveData<ImageVector>
         get() = _listModeIcon
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
 
     private val _isEmpty = MutableLiveData(false)
     val isEmpty: LiveData<Boolean>
@@ -38,25 +32,38 @@ class NoteListViewModel @Inject constructor(
     val notes = noteDisplayRepository
         .availableNotes
         .distinctUntilChanged()
-        .onStart {
-            _isLoading.value = true
-        }
         .onEach {
             _isEmpty.value = it.isEmpty()
-            _isLoading.value = false
         }
 
+    val isListMode: SharedFlow<Boolean> = notesDataStoreManager
+        .isListMode
+        .onEach { isListMode ->
+            _listModeIcon.value = if (isListMode) {
+                Icons.Filled.GridView
+            } else {
+                Icons.Filled.ViewList
+            }
+        }
+        .shareIn(
+            viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+
+    val isLoading: SharedFlow<Boolean> = notes
+        .combine(isListMode) { _, _ -> false }
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), replay = 1)
+
     fun setDisplayMode(isListMode: Boolean) {
-        _isListMode.value = isListMode
-        _listModeIcon.value = if (isListMode) {
-            Icons.Filled.GridView
-        } else {
-            Icons.Filled.ViewList
+        viewModelScope.launch {
+            notesDataStoreManager.setListMode(isListMode)
         }
     }
 
     override fun onCleared() {
         super.onCleared()
         noteDisplayRepository.destroy()
+        notesDataStoreManager.dispose()
     }
 }

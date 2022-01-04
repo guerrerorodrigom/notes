@@ -4,6 +4,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
@@ -22,7 +23,7 @@ class NotesListScreen(
 
     @Composable
     override fun TopAppBarActions() {
-        val isListMode by viewModel.isListMode.observeAsState(true)
+        val isListMode by viewModel.isListMode.collectAsState(true)
         val listModeIcon by viewModel.listModeIcon.observeAsState(Icons.Filled.GridView)
 
         IconButton(onClick = { onSortNotesClicked() }) {

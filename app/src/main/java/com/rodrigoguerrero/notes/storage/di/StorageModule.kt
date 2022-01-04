@@ -6,6 +6,8 @@ import com.rodrigoguerrero.notes.storage.NotesDatabase
 import com.rodrigoguerrero.notes.storage.dao.TextNotesDao
 import com.rodrigoguerrero.notes.storage.datasources.TextNotesDataSource
 import com.rodrigoguerrero.notes.storage.datasources.TextNotesDataSourceImpl
+import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManager
+import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManagerImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -20,6 +22,11 @@ abstract class StorageAbstractModule {
     abstract fun bindTextNotesDataSource(
         textNotesDataSource: TextNotesDataSourceImpl
     ): TextNotesDataSource
+
+    @Binds
+    abstract fun bindNotesDataStoreManager(
+        notesDataStoreManager: NotesDataStoreManagerImpl
+    ): NotesDataStoreManager
 }
 
 @Module
