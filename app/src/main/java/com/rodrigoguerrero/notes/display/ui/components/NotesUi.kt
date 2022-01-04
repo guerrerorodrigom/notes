@@ -11,16 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.common.ui.cardElevation
 import com.rodrigoguerrero.notes.common.ui.padding16
 import com.rodrigoguerrero.notes.common.ui.padding4
 import com.rodrigoguerrero.notes.common.ui.padding8
+import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
 fun TextNoteCard(
-    title: String,
-    content: String,
+    note: Note,
+    onNoteClicked: (UUID) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -28,20 +30,20 @@ fun TextNoteCard(
             .padding(horizontal = padding8, vertical = padding4)
             .fillMaxWidth(),
         elevation = cardElevation,
-        onClick = {}
+        onClick = { onNoteClicked(note.id) }
     ) {
         Column(
             modifier = Modifier.padding(padding16)
         ) {
-            if (title.isNotEmpty()) {
+            if (note.title?.isNotEmpty() == true) {
                 Text(
-                    text = title,
+                    text = note.title,
                     style = MaterialTheme.typography.h5,
                     modifier = Modifier.padding(bottom = padding8)
                 )
             }
             Text(
-                text = content,
+                text = note.content,
                 style = MaterialTheme.typography.body1,
                 maxLines = 8,
                 overflow = TextOverflow.Ellipsis
@@ -54,8 +56,14 @@ fun TextNoteCard(
 @Preview
 @Composable
 fun PreviewNoteCard() {
-    TextNoteCard(
-        "Note Title",
-        "This is the note content and it can be very very very very very very very very very very long."
+    val note = Note(
+        id = UUID.randomUUID(),
+        title = "Note Title",
+        content = "This is the note content and it can be very very very very very very very very very very long.",
+        createdDate = Date().time,
+        modifiedDate = Date().time,
+        isHidden = false,
+        isArchived = false
     )
+    TextNoteCard(note, {})
 }

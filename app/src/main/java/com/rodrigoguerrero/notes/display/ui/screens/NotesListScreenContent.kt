@@ -28,6 +28,7 @@ import com.rodrigoguerrero.notes.common.ui.padding4
 import com.rodrigoguerrero.notes.common.ui.padding8
 import com.rodrigoguerrero.notes.display.ui.components.TextNoteCard
 import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
+import java.util.*
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -48,15 +49,18 @@ fun NotesListScreen(
     when {
         isLoading -> FulLScreenProgress()
         isEmpty -> FullScreenLottie(composition = lottieComposition, progress = lottieProgress)
-        isListMode -> NotesList(notes)
-        !isListMode -> NotesGrid(notes)
+        isListMode -> NotesList(notes) {}
+        !isListMode -> NotesGrid(notes) {}
     }
 }
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun NotesGrid(notes: List<Note>) {
+fun NotesGrid(
+    notes: List<Note>,
+    onNoteClicked: (UUID) -> Unit
+) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -68,7 +72,7 @@ fun NotesGrid(notes: List<Note>) {
                 .padding(padding4)
         ) {
             notes.forEach { note ->
-                TextNoteCard(title = note.title.orEmpty(), content = note.content)
+                TextNoteCard(note, onNoteClicked)
             }
         }
     }
@@ -76,13 +80,16 @@ fun NotesGrid(notes: List<Note>) {
 
 @ExperimentalMaterialApi
 @Composable
-fun NotesList(notes: List<Note>) {
+fun NotesList(
+    notes: List<Note>,
+    onNoteClicked: (UUID) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .padding(top = padding8)
     ) {
-        items(notes) {
-            TextNoteCard(title = it.title.orEmpty(), content = it.content)
+        items(notes) { note ->
+            TextNoteCard(note, onNoteClicked)
         }
     }
 }
