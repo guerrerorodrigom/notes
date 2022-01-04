@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.creation.repository.NoteCreationRepository
-import com.rodrigoguerrero.notes.creation.repository.NoteCreationStatus
+import com.rodrigoguerrero.notes.creation.repository.NoteOperationStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -19,8 +19,8 @@ class CreateNoteViewModel @Inject constructor(
 ) : ViewModel() {
 
     val successState = noteCreationRepository
-        .noteCreationStatus
-        .map { it == NoteCreationStatus.Success }
+        .noteOperationStatus
+        .map { it == NoteOperationStatus.Success }
         .onEach {
             title.value = ""
             content.value = ""
@@ -30,9 +30,9 @@ class CreateNoteViewModel @Inject constructor(
     val content = MutableStateFlow("")
     val isFabEnabled = content.map { it.isNotEmpty() }
     val processing = noteCreationRepository
-        .noteCreationStatus
+        .noteOperationStatus
         .map {
-            it == NoteCreationStatus.Processing
+            it == NoteOperationStatus.Processing
         }
 
     fun createNote() {
@@ -46,7 +46,7 @@ class CreateNoteViewModel @Inject constructor(
                 isArchived = false,
                 id = UUID.randomUUID()
             )
-            noteCreationRepository.createTextNote(note)
+            noteCreationRepository.upsertTextNote(note)
         }
     }
 }

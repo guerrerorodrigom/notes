@@ -2,21 +2,40 @@ package com.rodrigoguerrero.notes.creation.repository
 
 import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.storage.datasources.TextNotesDataSource
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
+import java.util.*
 import javax.inject.Inject
 
+@FlowPreview
 class NoteCreationRepositoryImpl @Inject constructor(
     private val textNotesDataSource: TextNotesDataSource
 ) : NoteCreationRepository {
 
-    private val _noteCreationStatus = MutableSharedFlow<NoteCreationStatus>()
-    override val noteCreationStatus: SharedFlow<NoteCreationStatus>
-        get() = _noteCreationStatus
+    private val _status = MutableSharedFlow<NoteOperationStatus>()
+    override val noteOperationStatus: SharedFlow<NoteOperationStatus>
+        get() = _status
 
-    override suspend fun createTextNote(note: Note) {
-        _noteCreationStatus.emit(NoteCreationStatus.Processing)
+    override suspend fun upsertTextNote(note: Note) {
+        _status.emit(NoteOperationStatus.Processing)
         textNotesDataSource.addNote(note)
-        _noteCreationStatus.emit(NoteCreationStatus.Success)
+        _status.emit(NoteOperationStatus.Success)
+    }
+
+    override suspend fun getNote(uuid: UUID) {
+        _status.emit(NoteOperationStatus.Processing)
+        textNotesDataSource
+            .notes
+            .flatMapConcat { list ->
+                list
+                    .filter { note ->
+                        note.id == uuid
+                    }
+                    .asFlow()
+                    .map { it }
+            }
+            .collect { note ->
+                _status.emit(NoteOperationStatus.Retrieved(note))
+            }
     }
 }

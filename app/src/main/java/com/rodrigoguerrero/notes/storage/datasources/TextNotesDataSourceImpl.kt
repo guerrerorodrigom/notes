@@ -22,8 +22,4 @@ class TextNotesDataSourceImpl @Inject constructor(
     override suspend fun addNote(note: Note) {
         textNotesDao.insertNote(note = note.toTextNoteEntity())
     }
-
-    override suspend fun getNote(id: UUID): Flow<Note> {
-        return textNotesDao.getNote(id).map { it.toNote() }
-    }
 }

@@ -14,3 +14,5 @@ val drawerMenuItemRoundedCorner = 50.dp
 val drawerMenuTopSpace = 24.dp
 
 val maxColumnWithStaggeredGrid = 220.dp
+
+val fabBottomPadding = 12.dp

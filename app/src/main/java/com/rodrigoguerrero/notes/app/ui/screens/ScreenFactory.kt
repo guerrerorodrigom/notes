@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CREATE_TEXT_NOTE
+import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.EDIT_TEXT_NOTE_UUID
 import com.rodrigoguerrero.notes.creation.ui.components.CreateNoteScreen
+import com.rodrigoguerrero.notes.creation.ui.components.EditNoteScreen
 import com.rodrigoguerrero.notes.display.ui.components.NotesListScreen
 import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
 import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
@@ -21,6 +23,13 @@ fun getScreen(
 ): Screen {
     return when (currentDestination) {
         CREATE_TEXT_NOTE -> CreateNoteScreen(
+            onBackPressed = { navController.popBackStack() },
+            onAddNotificationClicked = {},
+            onPinNoteClicked = {},
+            onMoreClicked = {},
+            viewModelStoreOwner = viewModelStoreOwner
+        )
+        EDIT_TEXT_NOTE_UUID -> EditNoteScreen(
             onBackPressed = { navController.popBackStack() },
             onAddNotificationClicked = {},
             onPinNoteClicked = {},

@@ -38,6 +38,7 @@ import java.util.*
 @Composable
 fun NotesListScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
+    onNoteClicked: (UUID) -> Unit,
     viewModel: NoteListViewModel = hiltViewModel(viewModelStoreOwner)
 ) {
     val notes: List<Note> by viewModel.notes.collectAsState(initial = emptyList())
@@ -53,8 +54,8 @@ fun NotesListScreen(
     when {
         isLoading -> FulLScreenProgress()
         isEmpty -> FullScreenLottie(composition = lottieComposition, progress = lottieProgress)
-        isListMode -> NotesList(notes) {}
-        !isListMode -> NotesGrid(notes) {}
+        isListMode -> NotesList(notes, onNoteClicked)
+        !isListMode -> NotesGrid(notes, onNoteClicked)
     }
 }
 

@@ -3,10 +3,10 @@ package com.rodrigoguerrero.notes.creation.ui.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,9 +18,9 @@ import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.common.ui.components.BackNavigationIcon
 import com.rodrigoguerrero.notes.common.ui.fabBottomPadding
-import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
+import com.rodrigoguerrero.notes.creation.viewmodels.EditNoteViewModel
 
-class CreateNoteScreen(
+class EditNoteScreen(
     private val onBackPressed: () -> Unit,
     private val onPinNoteClicked: () -> Unit,
     private val onAddNotificationClicked: () -> Unit,
@@ -49,20 +49,29 @@ class CreateNoteScreen(
 
     @Composable
     override fun Fab() {
-        val viewModel: CreateNoteViewModel = hiltViewModel(viewModelStoreOwner)
-        val isFabEnabled by viewModel.isFabEnabled.collectAsState(false)
+        val viewModel: EditNoteViewModel = hiltViewModel(viewModelStoreOwner)
+        val areFieldsEnabled by viewModel.areFieldsEnabled.collectAsState(false)
 
-        if (isFabEnabled) {
+        if (areFieldsEnabled) {
             FloatingActionButton(
-                onClick = {
-                    viewModel.createNote()
-                },
+                onClick = { viewModel.save() },
                 contentColor = MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(bottom = fabBottomPadding)
             ) {
                 Icon(
                     imageVector = Icons.Filled.Save,
-                    contentDescription = stringResource(R.string.save_note)
+                    contentDescription = stringResource(R.string.edit_note)
+                )
+            }
+        } else {
+            FloatingActionButton(
+                onClick = { viewModel.enableFields() },
+                contentColor = MaterialTheme.colors.onSurface,
+                modifier = Modifier.padding(bottom = fabBottomPadding)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = stringResource(R.string.edit_note)
                 )
             }
         }

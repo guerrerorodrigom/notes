@@ -16,15 +16,21 @@ import com.rodrigoguerrero.notes.app.navigation.MainDestinations.SETTINGS
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.TAGS
 import com.rodrigoguerrero.notes.configuration.ui.screens.SettingsScreen
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CREATE_TEXT_NOTE
+import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.EDIT_TEXT_NOTE
+import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.EDIT_TEXT_NOTE_UUID
 import com.rodrigoguerrero.notes.creation.ui.screens.CreateNoteScreenContent
-import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
+import com.rodrigoguerrero.notes.creation.ui.screens.EditNoteScreen
 import com.rodrigoguerrero.notes.display.ui.screens.ArchiveScreen
 import com.rodrigoguerrero.notes.display.ui.screens.DeletedScreen
 import com.rodrigoguerrero.notes.display.ui.screens.NotesListScreen
-import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
 import com.rodrigoguerrero.notes.tags.ui.screens.TagsScreen
-import com.rodrigoguerrero.notes.ui.screens.*
+import com.rodrigoguerrero.notes.ui.screens.NotebooksScreen
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import java.util.*
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
@@ -35,7 +41,12 @@ fun NotesGraph(
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(ALL_NOTES) {
-            NotesListScreen(viewModelStoreOwner)
+            NotesListScreen(
+                viewModelStoreOwner = viewModelStoreOwner,
+                onNoteClicked = {
+                    navController.navigate("$EDIT_TEXT_NOTE/$it")
+                }
+            )
         }
         composable(ARCHIVE) {
             ArchiveScreen()
@@ -51,6 +62,12 @@ fun NotesGraph(
         }
         composable(SETTINGS) {
             SettingsScreen()
+        }
+        composable(EDIT_TEXT_NOTE_UUID) { navBackStackEntry ->
+            val id = UUID.fromString(navBackStackEntry.arguments?.getString("uuid"))
+            EditNoteScreen(id, viewModelStoreOwner, {
+                navController.popBackStack()
+            })
         }
         composable(CREATE_TEXT_NOTE) {
             CreateNoteScreenContent(viewModelStoreOwner) {
