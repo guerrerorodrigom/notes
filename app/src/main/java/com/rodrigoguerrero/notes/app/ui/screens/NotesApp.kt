@@ -1,5 +1,6 @@
 package com.rodrigoguerrero.notes.app.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -19,8 +20,10 @@ import com.rodrigoguerrero.notes.app.ui.components.MainDrawerMenu
 import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.common.ui.topBarElevation
 import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
+import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
 import kotlinx.coroutines.launch
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
 fun NotesApp() {
@@ -33,13 +36,15 @@ fun NotesApp() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route ?: DEFAULT
                 val createNoteViewModel: CreateNoteViewModel = hiltViewModel()
+                val notesListViewModel: NoteListViewModel = hiltViewModel()
 
                 var screen: Screen = getScreen(
                     currentRoute,
                     navController,
                     scope,
                     scaffoldState.drawerState,
-                    createNoteViewModel
+                    createNoteViewModel,
+                    notesListViewModel
                 )
 
                 navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -48,7 +53,8 @@ fun NotesApp() {
                         navController,
                         scope,
                         scaffoldState.drawerState,
-                        createNoteViewModel
+                        createNoteViewModel,
+                        notesListViewModel
                     )
                 }
 
@@ -84,7 +90,8 @@ fun NotesApp() {
                     Box(modifier = Modifier.padding(padding)) {
                         NotesGraph(
                             navController = navController,
-                            createNoteViewModel = createNoteViewModel
+                            createNoteViewModel = createNoteViewModel,
+                            notesListViewModel = notesListViewModel
                         )
                     }
                 }
@@ -93,6 +100,7 @@ fun NotesApp() {
     }
 }
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Preview
 @Composable

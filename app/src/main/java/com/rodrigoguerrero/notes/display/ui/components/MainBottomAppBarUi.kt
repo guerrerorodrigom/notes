@@ -1,4 +1,4 @@
-package com.rodrigoguerrero.notes.app.ui.components
+package com.rodrigoguerrero.notes.display.ui.components
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -14,7 +14,7 @@ import com.rodrigoguerrero.notes.common.ui.bottomBarElevation
 import com.rodrigoguerrero.notes.app.theme.NotesTheme
 
 @Composable
-fun MainBottomAppBar(
+fun NotesListBottomAppBar(
     onBottomAppIconClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -51,7 +51,7 @@ fun BottomAppBarIcon(
 @Composable
 fun PreviewMainBottomAppBar() {
     NotesTheme {
-        MainBottomAppBar(onBottomAppIconClicked = {})
+        NotesListBottomAppBar(onBottomAppIconClicked = {})
     }
 }
 

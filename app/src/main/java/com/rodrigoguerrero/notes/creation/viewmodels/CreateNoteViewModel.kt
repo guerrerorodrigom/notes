@@ -8,6 +8,7 @@ import com.rodrigoguerrero.notes.creation.repository.NoteCreationStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -20,6 +21,10 @@ class CreateNoteViewModel @Inject constructor(
     val successState = noteCreationRepository
         .noteCreationStatus
         .map { it == NoteCreationStatus.Success }
+        .onEach {
+            title.value = ""
+            content.value = ""
+        }
 
     val title = MutableStateFlow("")
     val content = MutableStateFlow("")

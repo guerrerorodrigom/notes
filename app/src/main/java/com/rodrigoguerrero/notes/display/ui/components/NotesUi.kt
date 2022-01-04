@@ -25,7 +25,7 @@ fun TextNoteCard(
 ) {
     Card(
         modifier = modifier
-            .padding(horizontal = padding16, vertical = padding4)
+            .padding(horizontal = padding8, vertical = padding4)
             .fillMaxWidth(),
         elevation = cardElevation,
         onClick = {}

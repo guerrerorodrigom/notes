@@ -1,39 +1,34 @@
-package com.rodrigoguerrero.notes.app.ui.screens
+package com.rodrigoguerrero.notes.display.ui.components
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import com.rodrigoguerrero.notes.R
-import com.rodrigoguerrero.notes.app.ui.components.MainBottomAppBar
 import com.rodrigoguerrero.notes.common.ui.Screen
-import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations
+import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
 
-class MainScreen(
+class NotesListScreen(
     private val onNavigationIconClicked: () -> Unit,
     private val onSortNotesClicked: () -> Unit,
-    private val onListGridClicked: () -> Unit,
     private val onMoreClicked: () -> Unit,
     private val onFabClicked: () -> Unit,
-    private val onBottomAppIconClicked: (String) -> Unit
+    private val onBottomAppIconClicked: (String) -> Unit,
+    private val viewModel: NoteListViewModel
 ) : Screen {
 
     @Composable
     override fun TopAppBarActions() {
-        var listModeIcon by remember { mutableStateOf(Icons.Filled.ViewList) }
+        val isListMode by viewModel.isListMode.observeAsState(true)
+        val listModeIcon by viewModel.listModeIcon.observeAsState(Icons.Filled.GridView)
 
         IconButton(onClick = { onSortNotesClicked() }) {
             Icon(Icons.Filled.Sort, stringResource(R.string.sort_notes_icon))
         }
-        IconButton(onClick = {
-            listModeIcon = if (listModeIcon.name == Icons.Filled.ViewList.name) {
-                Icons.Filled.GridView
-            } else {
-                Icons.Filled.ViewList
-            }
-            onListGridClicked()
-        }) {
+        IconButton(onClick = { viewModel.setDisplayMode(!isListMode) }) {
             Icon(listModeIcon, stringResource(R.string.view_list_mode_icon))
         }
         IconButton(onClick = { onMoreClicked() }) {
@@ -70,6 +65,6 @@ class MainScreen(
 
     @Composable
     override fun BottomAppBar() {
-        MainBottomAppBar(onBottomAppIconClicked = onBottomAppIconClicked)
+        NotesListBottomAppBar(onBottomAppIconClicked = onBottomAppIconClicked)
     }
 }
