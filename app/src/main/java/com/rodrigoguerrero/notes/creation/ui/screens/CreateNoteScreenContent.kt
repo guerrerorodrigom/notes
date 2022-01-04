@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
@@ -25,7 +26,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CreateNoteScreenContent(
-    viewModel: CreateNoteViewModel,
+    viewModelStoreOwner: ViewModelStoreOwner,
+    viewModel: CreateNoteViewModel = hiltViewModel(viewModelStoreOwner),
     onNavigateBack: () -> Unit
 ) {
     val showProgress by viewModel.processing.collectAsState(false)

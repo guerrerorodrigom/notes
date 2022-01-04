@@ -1,6 +1,7 @@
 package com.rodrigoguerrero.notes.app.ui.screens
 
 import androidx.compose.material.DrawerState
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CREATE_TEXT_NOTE
@@ -16,8 +17,7 @@ fun getScreen(
     navController: NavHostController,
     scope: CoroutineScope,
     drawerState: DrawerState,
-    createNoteViewModel: CreateNoteViewModel,
-    notesListViewModel: NoteListViewModel
+    viewModelStoreOwner: ViewModelStoreOwner
 ): Screen {
     return when (currentDestination) {
         CREATE_TEXT_NOTE -> CreateNoteScreen(
@@ -25,7 +25,7 @@ fun getScreen(
             onAddNotificationClicked = {},
             onPinNoteClicked = {},
             onMoreClicked = {},
-            viewModel = createNoteViewModel
+            viewModelStoreOwner = viewModelStoreOwner
         )
         else -> NotesListScreen(
             onNavigationIconClicked = {
@@ -37,7 +37,7 @@ fun getScreen(
             onMoreClicked = {},
             onFabClicked = { navController.navigate(CREATE_TEXT_NOTE) },
             onBottomAppIconClicked = { },
-            viewModel = notesListViewModel
+            viewModelStoreOwner = viewModelStoreOwner
         )
     }
 }

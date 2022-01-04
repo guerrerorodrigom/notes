@@ -13,6 +13,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -34,7 +37,8 @@ import java.util.*
 @ExperimentalMaterialApi
 @Composable
 fun NotesListScreen(
-    viewModel: NoteListViewModel
+    viewModelStoreOwner: ViewModelStoreOwner,
+    viewModel: NoteListViewModel = hiltViewModel(viewModelStoreOwner)
 ) {
     val notes: List<Note> by viewModel.notes.collectAsState(initial = emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)

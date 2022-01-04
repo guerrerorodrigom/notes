@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.creation.viewmodels.CreateNoteViewModel
@@ -19,7 +21,7 @@ class CreateNoteScreen(
     private val onPinNoteClicked: () -> Unit,
     private val onAddNotificationClicked: () -> Unit,
     private val onMoreClicked: () -> Unit,
-    private val viewModel: CreateNoteViewModel
+    private val viewModelStoreOwner: ViewModelStoreOwner
 ) : Screen {
 
     @Composable
@@ -49,6 +51,7 @@ class CreateNoteScreen(
 
     @Composable
     override fun Fab() {
+        val viewModel: CreateNoteViewModel = hiltViewModel(viewModelStoreOwner)
         val isFabEnabled by viewModel.isFabEnabled.collectAsState(false)
 
         if (isFabEnabled) {

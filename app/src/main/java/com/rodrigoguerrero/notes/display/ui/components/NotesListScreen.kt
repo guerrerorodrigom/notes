@@ -8,6 +8,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
@@ -18,11 +20,12 @@ class NotesListScreen(
     private val onMoreClicked: () -> Unit,
     private val onFabClicked: () -> Unit,
     private val onBottomAppIconClicked: (String) -> Unit,
-    private val viewModel: NoteListViewModel
+    private val viewModelStoreOwner: ViewModelStoreOwner
 ) : Screen {
 
     @Composable
     override fun TopAppBarActions() {
+        val viewModel: NoteListViewModel = hiltViewModel(viewModelStoreOwner)
         val isListMode by viewModel.isListMode.collectAsState(true)
         val listModeIcon by viewModel.listModeIcon.observeAsState(Icons.Filled.GridView)
 

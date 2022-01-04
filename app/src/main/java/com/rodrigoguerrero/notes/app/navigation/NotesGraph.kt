@@ -3,6 +3,7 @@ package com.rodrigoguerrero.notes.app.navigation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,13 +30,12 @@ import com.rodrigoguerrero.notes.ui.screens.*
 @Composable
 fun NotesGraph(
     navController: NavHostController,
-    createNoteViewModel: CreateNoteViewModel,
-    notesListViewModel: NoteListViewModel,
+    viewModelStoreOwner: ViewModelStoreOwner,
     startDestination: String = DEFAULT
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(ALL_NOTES) {
-            NotesListScreen(notesListViewModel)
+            NotesListScreen(viewModelStoreOwner)
         }
         composable(ARCHIVE) {
             ArchiveScreen()
@@ -53,7 +53,7 @@ fun NotesGraph(
             SettingsScreen()
         }
         composable(CREATE_TEXT_NOTE) {
-            CreateNoteScreenContent(createNoteViewModel) {
+            CreateNoteScreenContent(viewModelStoreOwner) {
                 navController.popBackStack()
             }
         }

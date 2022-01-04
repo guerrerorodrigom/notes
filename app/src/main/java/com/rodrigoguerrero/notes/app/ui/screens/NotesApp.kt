@@ -10,6 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -26,7 +27,9 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun NotesApp() {
+fun NotesApp(
+    viewModelStoreOwner: ViewModelStoreOwner
+) {
     NotesTheme {
         ProvideWindowInsets {
             Surface(color = MaterialTheme.colors.background) {
@@ -35,16 +38,13 @@ fun NotesApp() {
                 val scaffoldState = rememberScaffoldState()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route ?: DEFAULT
-                val createNoteViewModel: CreateNoteViewModel = hiltViewModel()
-                val notesListViewModel: NoteListViewModel = hiltViewModel()
 
                 var screen: Screen = getScreen(
                     currentRoute,
                     navController,
                     scope,
                     scaffoldState.drawerState,
-                    createNoteViewModel,
-                    notesListViewModel
+                    viewModelStoreOwner
                 )
 
                 navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -53,8 +53,7 @@ fun NotesApp() {
                         navController,
                         scope,
                         scaffoldState.drawerState,
-                        createNoteViewModel,
-                        notesListViewModel
+                        viewModelStoreOwner
                     )
                 }
 
@@ -90,20 +89,11 @@ fun NotesApp() {
                     Box(modifier = Modifier.padding(padding)) {
                         NotesGraph(
                             navController = navController,
-                            createNoteViewModel = createNoteViewModel,
-                            notesListViewModel = notesListViewModel
+                            viewModelStoreOwner = viewModelStoreOwner
                         )
                     }
                 }
             }
         }
     }
-}
-
-@ExperimentalFoundationApi
-@ExperimentalMaterialApi
-@Preview
-@Composable
-fun PreviewNotesApp() {
-    NotesApp()
 }
