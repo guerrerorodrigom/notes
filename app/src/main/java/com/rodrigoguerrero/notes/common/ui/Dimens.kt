@@ -12,3 +12,5 @@ val bottomBarElevation = 22.dp
 
 val drawerMenuItemRoundedCorner = 50.dp
 val drawerMenuTopSpace = 24.dp
+
+val maxColumnWithStaggeredGrid = 220.dp

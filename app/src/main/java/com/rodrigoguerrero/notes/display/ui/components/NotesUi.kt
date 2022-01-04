@@ -33,15 +33,17 @@ fun TextNoteCard(
         Column(
             modifier = Modifier.padding(padding16)
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(bottom = padding8)
-            )
+            if (title.isNotEmpty()) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier.padding(bottom = padding8)
+                )
+            }
             Text(
                 text = content,
                 style = MaterialTheme.typography.body1,
-                maxLines = 2,
+                maxLines = 8,
                 overflow = TextOverflow.Ellipsis
             )
         }

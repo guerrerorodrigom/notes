@@ -1,11 +1,12 @@
 package com.rodrigoguerrero.notes.display.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,10 +17,14 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.accompanist.insets.statusBarsPadding
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
 import com.rodrigoguerrero.notes.common.ui.components.FullScreenLottie
+import com.rodrigoguerrero.notes.common.ui.components.StaggeredVerticalGrid
+import com.rodrigoguerrero.notes.common.ui.maxColumnWithStaggeredGrid
+import com.rodrigoguerrero.notes.common.ui.padding4
 import com.rodrigoguerrero.notes.common.ui.padding8
 import com.rodrigoguerrero.notes.display.ui.components.TextNoteCard
 import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
@@ -52,12 +57,19 @@ fun NotesListScreen(
 @ExperimentalMaterialApi
 @Composable
 fun NotesGrid(notes: List<Note>) {
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
-        modifier = Modifier.padding(top = padding8)
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .statusBarsPadding()
     ) {
-        items(notes) { note ->
-            TextNoteCard(title = note.title.orEmpty(), content = note.content)
+        StaggeredVerticalGrid(
+            maxColumnWidth = maxColumnWithStaggeredGrid,
+            modifier = Modifier
+                .padding(padding4)
+        ) {
+            notes.forEach { note ->
+                TextNoteCard(title = note.title.orEmpty(), content = note.content)
+            }
         }
     }
 }
@@ -66,7 +78,8 @@ fun NotesGrid(notes: List<Note>) {
 @Composable
 fun NotesList(notes: List<Note>) {
     LazyColumn(
-        modifier = Modifier.padding(top = padding8)
+        modifier = Modifier
+            .padding(top = padding8)
     ) {
         items(notes) {
             TextNoteCard(title = it.title.orEmpty(), content = it.content)
