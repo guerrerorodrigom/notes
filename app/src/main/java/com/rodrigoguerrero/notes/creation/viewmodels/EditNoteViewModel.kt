@@ -1,5 +1,6 @@
 package com.rodrigoguerrero.notes.creation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +40,15 @@ class EditNoteViewModel @Inject constructor(
     val areFieldsEnabled: StateFlow<Boolean>
         get() = _areFieldsEnabled
 
+    private val _showWarning = MutableStateFlow(false)
+    val showWarning: StateFlow<Boolean>
+        get() = _showWarning
+
+    val hasChanged = savedNote
+        .combine(_updatedNote) { originalNote, updatedNote ->
+            updatedNote != null && originalNote != updatedNote
+        }
+
     val saveCompleted = textNoteCreationRepository
         .noteOperationStatus
         .filter { it == NoteOperationStatus.Success }
@@ -73,5 +83,13 @@ class EditNoteViewModel @Inject constructor(
 
     private fun disableFields() {
         _areFieldsEnabled.value = false
+    }
+
+    fun showWarning() {
+        _showWarning.value = true
+    }
+
+    fun hideWarning() {
+        _showWarning.value = false
     }
 }

@@ -19,7 +19,11 @@ import com.rodrigoguerrero.notes.common.ui.Screen
 import com.rodrigoguerrero.notes.common.ui.components.BackNavigationIcon
 import com.rodrigoguerrero.notes.common.ui.fabBottomPadding
 import com.rodrigoguerrero.notes.creation.viewmodels.EditNoteViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class EditNoteScreen(
     private val onBackPressed: () -> Unit,
     private val onPinNoteClicked: () -> Unit,
@@ -39,7 +43,15 @@ class EditNoteScreen(
 
     @Composable
     override fun TopAppBarNavigationIcon() {
-        BackNavigationIcon(onBackPressed)
+        val viewModel: EditNoteViewModel = hiltViewModel(viewModelStoreOwner)
+        val hasChanged by viewModel.hasChanged.collectAsState(false)
+        BackNavigationIcon {
+            if (!hasChanged) {
+                onBackPressed()
+            } else {
+                viewModel.showWarning()
+            }
+        }
     }
 
     @Composable
