@@ -1,6 +1,5 @@
 package com.rodrigoguerrero.notes.creation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -49,10 +48,12 @@ class EditNoteViewModel @Inject constructor(
             updatedNote != null && originalNote != updatedNote
         }
 
+    private val noChanges = MutableStateFlow(false)
     val saveCompleted = textNoteCreationRepository
         .noteOperationStatus
-        .filter { it == NoteOperationStatus.Success }
-        .map { true }
+        .combine(noChanges) { status, saveWithNoChanges ->
+            status == NoteOperationStatus.Success || saveWithNoChanges
+        }
         .onEach { disableFields() }
 
     fun getNote(uuid: UUID) {
@@ -77,7 +78,7 @@ class EditNoteViewModel @Inject constructor(
         viewModelScope.launch {
             _updatedNote.value?.let {
                 textNoteCreationRepository.upsertTextNote(it)
-            }
+            } ?: noChanges.emit(true)
         }
     }
 
