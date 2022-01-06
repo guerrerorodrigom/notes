@@ -12,26 +12,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.rodrigoguerrero.notes.R
 
 @Composable
-fun EditNoteTopAppBar(
-    onPinNoteClicked: () -> Unit,
-    onAddNotificationClicked: () -> Unit,
-    onMoreClicked: () -> Unit,
-) {
-    IconButton(onClick = onPinNoteClicked) {
+fun EditNoteTopAppBarActions() {
+    IconButton(onClick = {}) {
         Icon(Icons.Filled.PushPin, stringResource(R.string.pin_note))
     }
-    IconButton(onClick = onAddNotificationClicked) {
+    IconButton(onClick = {}) {
         Icon(Icons.Filled.Notifications, stringResource(R.string.add_reminder))
     }
-    IconButton(onClick = onMoreClicked) {
+    IconButton(onClick = {}) {
         Icon(Icons.Filled.MoreVert, stringResource(R.string.more_icon))
-    }
-}
-
-@Preview
-@Composable
-fun PreviewEditTopAppBar() {
-    EditNoteTopAppBar(onPinNoteClicked = { }, onAddNotificationClicked = { }) {
-
     }
 }

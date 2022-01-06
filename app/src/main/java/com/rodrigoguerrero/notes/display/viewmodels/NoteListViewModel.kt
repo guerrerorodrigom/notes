@@ -55,9 +55,9 @@ class NoteListViewModel @Inject constructor(
         .combine(isListMode) { _, _ -> false }
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), replay = 1)
 
-    fun setDisplayMode(isListMode: Boolean) {
+    fun toggleListMode() {
         viewModelScope.launch {
-            notesDataStoreManager.setListMode(isListMode)
+            notesDataStoreManager.toggleListMode()
         }
     }
 

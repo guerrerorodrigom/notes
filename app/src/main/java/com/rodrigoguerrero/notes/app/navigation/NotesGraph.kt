@@ -3,10 +3,9 @@ package com.rodrigoguerrero.notes.app.navigation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ALL_NOTES
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ARCHIVE
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.DEFAULT
@@ -34,17 +33,19 @@ import java.util.*
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun NotesGraph(
-    navController: NavHostController,
-    viewModelStoreOwner: ViewModelStoreOwner,
-    startDestination: String = DEFAULT
-) {
-    NavHost(navController = navController, startDestination = startDestination) {
+fun NotesGraph() {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = DEFAULT
+    ) {
         composable(ALL_NOTES) {
             NotesListScreen(
-                viewModelStoreOwner = viewModelStoreOwner,
                 onNoteClicked = {
                     navController.navigate("$EDIT_TEXT_NOTE/$it")
+                },
+                onCreateNote = {
+                    navController.navigate(CREATE_TEXT_NOTE)
                 }
             )
         }
@@ -65,13 +66,13 @@ fun NotesGraph(
         }
         composable(EDIT_TEXT_NOTE_UUID) { navBackStackEntry ->
             val id = UUID.fromString(navBackStackEntry.arguments?.getString("uuid"))
-            EditNoteScreen(id, viewModelStoreOwner, {
-                navController.popBackStack()
-            })
+            EditNoteScreen(id) {
+                navController.popBackStack(EDIT_TEXT_NOTE_UUID, inclusive = true)
+            }
         }
         composable(CREATE_TEXT_NOTE) {
-            CreateNoteScreenContent(viewModelStoreOwner) {
-                navController.popBackStack()
+            CreateNoteScreenContent {
+                navController.popBackStack(CREATE_TEXT_NOTE, inclusive = true)
             }
         }
     }

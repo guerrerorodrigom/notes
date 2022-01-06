@@ -38,9 +38,10 @@ class NotesDataStoreManagerImpl @Inject constructor(
             replay = 1
         )
 
-    override suspend fun setListMode(isListMode: Boolean) {
+    override suspend fun toggleListMode() {
         settings.edit { prefs ->
-            prefs[isListModePreference] = isListMode
+            val previousListMode = prefs[isListModePreference] ?: true
+            prefs[isListModePreference] = !previousListMode
         }
     }
 

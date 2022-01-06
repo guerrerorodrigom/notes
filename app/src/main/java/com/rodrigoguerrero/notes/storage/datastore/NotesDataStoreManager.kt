@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 interface NotesDataStoreManager {
     val isListMode: Flow<Boolean>
 
-    suspend fun setListMode(isListMode: Boolean)
+    suspend fun toggleListMode()
     fun dispose()
 }
