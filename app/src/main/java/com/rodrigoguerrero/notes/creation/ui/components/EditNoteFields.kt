@@ -8,6 +8,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,7 +26,8 @@ fun EditNoteFields(
     content: String,
     onContentChanged: (String) -> Unit,
     readOnlyFields: Boolean,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    focusRequester: FocusRequester
 ) {
     Surface {
         Column(
@@ -42,7 +45,8 @@ fun EditNoteFields(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(0.dp),
+                    .padding(0.dp)
+                    .focusRequester(focusRequester),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,

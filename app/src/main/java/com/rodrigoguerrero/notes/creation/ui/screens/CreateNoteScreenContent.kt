@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -71,6 +69,7 @@ fun CreateNote(viewModel: CreateNoteViewModel) {
     val title by viewModel.title.collectAsState()
     val content by viewModel.content.collectAsState()
     val scope = rememberCoroutineScope()
+    val focusRequester = FocusRequester()
 
     EditNoteFields(
         title = title,
@@ -78,6 +77,12 @@ fun CreateNote(viewModel: CreateNoteViewModel) {
         content = content,
         onContentChanged = { viewModel.content.value = it },
         scope = scope,
-        readOnlyFields = false
+        readOnlyFields = false,
+        focusRequester = focusRequester
     )
+
+    DisposableEffect(Unit) {
+        focusRequester.requestFocus()
+        onDispose { }
+    }
 }

@@ -3,11 +3,10 @@ package com.rodrigoguerrero.notes.creation.ui.screens
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.primarySurface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
@@ -38,6 +37,7 @@ fun EditNoteScreen(
     val saveCompleted by viewModel.saveCompleted.collectAsState(false)
     val showWarning by viewModel.showWarning.collectAsState(false)
     val scope = rememberCoroutineScope()
+    val focusRequester = FocusRequester()
 
     MainScaffold(
         topBar = {
@@ -59,7 +59,10 @@ fun EditNoteScreen(
             EditNoteFab(
                 areFieldsEnabled = areFieldsEnabled,
                 onSaveClicked = { viewModel.save() },
-                onEditClicked = { viewModel.enableFields() }
+                onEditClicked = {
+                    focusRequester.requestFocus()
+                    viewModel.enableFields()
+                }
             )
         }
     ) {
@@ -93,6 +96,7 @@ fun EditNoteScreen(
                         onContentChanged = { viewModel.onContentChanged(note, it) },
                         readOnlyFields = !areFieldsEnabled,
                         scope = scope,
+                        focusRequester = focusRequester
                     )
                 }
             }
