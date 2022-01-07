@@ -2,7 +2,7 @@
   <string name="app_name">Notes</string>
   <string name="main_top_bar_title">Notes</string>
   <string name="sort_notes_icon">Sort notes</string>
-  <string name="more_icon">More Options</string>
+  <string name="archive_unarchive">Archive or Unarchive note</string>
   <string name="open_drawer_menu_icon">Open Drawer Menu</string>
   <string name="view_list_mode_icon">View List Mode</string>
   <string name="all_notes">All Notes</string>

@@ -3,6 +3,8 @@ package com.rodrigoguerrero.notes.creation.ui.screens
 import androidx.activity.compose.BackHandler
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,6 +35,7 @@ fun EditNoteScreen(
     val noteToEdit by viewModel.note.collectAsState(null)
     val progress by viewModel.progress.observeAsState(true)
     val saveCompleted by viewModel.saveCompleted.collectAsState(false)
+    val archiveIcon by viewModel.archiveIcon.collectAsState(Icons.Filled.Archive)
     val scope = rememberCoroutineScope()
     val focusRequester = FocusRequester()
 
@@ -46,7 +49,12 @@ fun EditNoteScreen(
                         viewModel.save()
                     }
                 },
-                actions = { EditNoteTopAppBarActions() },
+                actions = {
+                    EditNoteTopAppBarActions(
+                        archiveIcon = archiveIcon,
+                        onArchiveUnarchive = { viewModel.onArchiveUnarchive(noteToEdit) }
+                    )
+                },
                 title = {}
             )
         }

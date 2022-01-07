@@ -1,5 +1,9 @@
 package com.rodrigoguerrero.notes.creation.viewmodels
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.Unarchive
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +39,16 @@ class EditNoteViewModel @Inject constructor(
     val progress: LiveData<Boolean>
         get() = _progress
 
+    val archiveIcon: Flow<ImageVector>
+        get() = note
+            .map {
+                if (it?.isArchived == true) {
+                    Icons.Filled.Unarchive
+                } else {
+                    Icons.Filled.Archive
+                }
+            }
+
     private val noChanges = MutableStateFlow(false)
     val saveCompleted = textNoteCreationRepository
         .noteOperationStatus
@@ -54,6 +68,14 @@ class EditNoteViewModel @Inject constructor(
 
     fun onContentChanged(note: Note, content: String) {
         _updatedNote.value = note.copy(content = content, modifiedDate = Date().time)
+    }
+
+    fun onArchiveUnarchive(note: Note?) {
+        viewModelScope.launch {
+            note?.let {
+                textNoteCreationRepository.upsertTextNote(it.copy(isArchived = !it.isArchived))
+            }
+        }
     }
 
     fun save() {

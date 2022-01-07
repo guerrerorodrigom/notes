@@ -47,6 +47,6 @@ fun DisplayNotesTopBarActions(
         Icon(listModeIcon, stringResource(R.string.view_list_mode_icon))
     }
     IconButton(onClick = { }) {
-        Icon(Icons.Filled.MoreVert, stringResource(R.string.more_icon))
+        Icon(Icons.Filled.MoreVert, stringResource(R.string.archive_unarchive))
     }
 }

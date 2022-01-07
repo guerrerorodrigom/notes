@@ -3,6 +3,7 @@ package com.rodrigoguerrero.notes.creation.ui.screens
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -51,7 +52,10 @@ fun CreateNoteScreenContent(
                 elevation = topBarElevation,
                 backgroundColor = MaterialTheme.colors.primarySurface,
                 navigationIcon = { BackNavigationIcon(onNavigateBack) },
-                actions = { EditNoteTopAppBarActions() },
+                actions = { EditNoteTopAppBarActions(
+                    archiveIcon = Icons.Filled.Archive,
+                    onArchiveUnarchive = { }
+                ) },
                 title = {}
             )
         }
