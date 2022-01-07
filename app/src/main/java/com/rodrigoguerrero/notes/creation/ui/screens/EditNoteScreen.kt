@@ -1,5 +1,6 @@
 package com.rodrigoguerrero.notes.creation.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.primarySurface
@@ -67,7 +68,10 @@ fun EditNoteScreen(
         }
     ) {
         when {
-            saveCompleted -> onBackPressed()
+            saveCompleted -> {
+                viewModel.hideWarning()
+                onBackPressed()
+            }
             progress -> {
                 FulLScreenProgress()
                 viewModel.getNote(uuid)
@@ -82,7 +86,6 @@ fun EditNoteScreen(
                         onDismiss = { viewModel.hideWarning() },
                         onConfirm = {
                             viewModel.save()
-                            viewModel.hideWarning()
                         },
                         onDismissRequest = {
                             viewModel.hideWarning()
@@ -98,6 +101,13 @@ fun EditNoteScreen(
                         scope = scope,
                         focusRequester = focusRequester
                     )
+                    BackHandler {
+                        if (!hasChanged) {
+                            onBackPressed()
+                        } else {
+                            viewModel.showWarning()
+                        }
+                    }
                 }
             }
         }
