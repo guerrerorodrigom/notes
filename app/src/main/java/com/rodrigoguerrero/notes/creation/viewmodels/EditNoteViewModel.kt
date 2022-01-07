@@ -35,35 +35,17 @@ class EditNoteViewModel @Inject constructor(
     val progress: LiveData<Boolean>
         get() = _progress
 
-    private val _areFieldsEnabled = MutableStateFlow(false)
-    val areFieldsEnabled: StateFlow<Boolean>
-        get() = _areFieldsEnabled
-
-    private val _showWarning = MutableStateFlow(false)
-    val showWarning: StateFlow<Boolean>
-        get() = _showWarning
-
-    val hasChanged = savedNote
-        .combine(_updatedNote) { originalNote, updatedNote ->
-            updatedNote != null && originalNote != updatedNote
-        }
-
     private val noChanges = MutableStateFlow(false)
     val saveCompleted = textNoteCreationRepository
         .noteOperationStatus
         .combine(noChanges) { status, saveWithNoChanges ->
             status == NoteOperationStatus.Success || saveWithNoChanges
         }
-        .onEach { disableFields() }
 
     fun getNote(uuid: UUID) {
         viewModelScope.launch {
             textNoteCreationRepository.getNote(uuid)
         }
-    }
-
-    fun enableFields() {
-        _areFieldsEnabled.value = true
     }
 
     fun onTitleChanged(note: Note, title: String) {
@@ -80,17 +62,5 @@ class EditNoteViewModel @Inject constructor(
                 textNoteCreationRepository.upsertTextNote(it)
             } ?: noChanges.emit(true)
         }
-    }
-
-    private fun disableFields() {
-        _areFieldsEnabled.value = false
-    }
-
-    fun showWarning() {
-        _showWarning.value = true
-    }
-
-    fun hideWarning() {
-        _showWarning.value = false
     }
 }

@@ -4,18 +4,17 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.primarySurface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.rodrigoguerrero.notes.R
+import com.rodrigoguerrero.notes.common.ui.components.BackNavigationIcon
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
 import com.rodrigoguerrero.notes.common.ui.components.MainScaffold
-import com.rodrigoguerrero.notes.common.ui.components.NotesAlertDialog
 import com.rodrigoguerrero.notes.common.ui.topBarElevation
-import com.rodrigoguerrero.notes.creation.ui.components.EditNoteBackNavIcon
-import com.rodrigoguerrero.notes.creation.ui.components.EditNoteFab
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteFields
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteTopAppBarActions
 import com.rodrigoguerrero.notes.creation.viewmodels.EditNoteViewModel
@@ -31,12 +30,9 @@ fun EditNoteScreen(
     onBackPressed: () -> Unit
 ) {
     val viewModel: EditNoteViewModel = hiltViewModel()
-    val hasChanged by viewModel.hasChanged.collectAsState(false)
     val noteToEdit by viewModel.note.collectAsState(null)
     val progress by viewModel.progress.observeAsState(true)
-    val areFieldsEnabled by viewModel.areFieldsEnabled.collectAsState(false)
     val saveCompleted by viewModel.saveCompleted.collectAsState(false)
-    val showWarning by viewModel.showWarning.collectAsState(false)
     val scope = rememberCoroutineScope()
     val focusRequester = FocusRequester()
 
@@ -46,69 +42,36 @@ fun EditNoteScreen(
                 elevation = topBarElevation,
                 backgroundColor = MaterialTheme.colors.primarySurface,
                 navigationIcon = {
-                    EditNoteBackNavIcon(
-                        hasChanged = hasChanged,
-                        onShowWarning = { viewModel.showWarning() },
-                        onBackPressed = onBackPressed
-                    )
+                    BackNavigationIcon {
+                        viewModel.save()
+                    }
                 },
                 actions = { EditNoteTopAppBarActions() },
                 title = {}
-            )
-        },
-        fab = {
-            EditNoteFab(
-                areFieldsEnabled = areFieldsEnabled,
-                onSaveClicked = { viewModel.save() },
-                onEditClicked = {
-                    focusRequester.requestFocus()
-                    viewModel.enableFields()
-                }
             )
         }
     ) {
         when {
             saveCompleted -> {
-                viewModel.hideWarning()
                 onBackPressed()
             }
             progress -> {
                 FulLScreenProgress()
                 viewModel.getNote(uuid)
             }
-            else -> {
-                if (showWarning) {
-                    NotesAlertDialog(
-                        confirmText = R.string.ok,
-                        dismissText = R.string.cancel,
-                        title = R.string.unsaved_note,
-                        content = R.string.unsaved_note_content,
-                        onDismiss = { viewModel.hideWarning() },
-                        onConfirm = {
-                            viewModel.save()
-                        },
-                        onDismissRequest = {
-                            viewModel.hideWarning()
-                        })
-                }
-                noteToEdit?.let { note ->
-                    EditNoteFields(
-                        title = note.title.orEmpty(),
-                        onTitleChanged = { viewModel.onTitleChanged(note, it) },
-                        content = note.content,
-                        onContentChanged = { viewModel.onContentChanged(note, it) },
-                        readOnlyFields = !areFieldsEnabled,
-                        scope = scope,
-                        focusRequester = focusRequester
-                    )
-                    BackHandler {
-                        if (!hasChanged) {
-                            onBackPressed()
-                        } else {
-                            viewModel.showWarning()
-                        }
-                    }
-                }
+        }
+
+        noteToEdit?.let { note ->
+            EditNoteFields(
+                title = note.title.orEmpty(),
+                onTitleChanged = { viewModel.onTitleChanged(note, it) },
+                content = note.content,
+                onContentChanged = { viewModel.onContentChanged(note, it) },
+                scope = scope,
+                focusRequester = focusRequester
+            )
+            BackHandler {
+                viewModel.save()
             }
         }
     }

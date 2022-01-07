@@ -9,11 +9,5 @@ fun EditNoteBackNavIcon(
     onBackPressed: () -> Unit,
     onShowWarning: () -> Unit
 ) {
-    BackNavigationIcon {
-        if (!hasChanged) {
-            onBackPressed()
-        } else {
-            onShowWarning()
-        }
-    }
+
 }

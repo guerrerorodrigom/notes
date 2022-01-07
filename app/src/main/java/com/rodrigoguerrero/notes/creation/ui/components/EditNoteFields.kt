@@ -25,7 +25,6 @@ fun EditNoteFields(
     onTitleChanged: (String) -> Unit,
     content: String,
     onContentChanged: (String) -> Unit,
-    readOnlyFields: Boolean,
     scope: CoroutineScope,
     focusRequester: FocusRequester
 ) {
@@ -52,7 +51,6 @@ fun EditNoteFields(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                readOnly = readOnlyFields,
                 placeholder = {
                     Text(
                         text = stringResource(R.string.note_title_placeholder),
@@ -81,7 +79,6 @@ fun EditNoteFields(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                readOnly = readOnlyFields,
                 placeholder = {
                     Text(
                         text = stringResource(R.string.note_content_placeholder),

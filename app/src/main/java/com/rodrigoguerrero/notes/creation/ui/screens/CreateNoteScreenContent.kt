@@ -77,7 +77,6 @@ fun CreateNote(viewModel: CreateNoteViewModel) {
         content = content,
         onContentChanged = { viewModel.content.value = it },
         scope = scope,
-        readOnlyFields = false,
         focusRequester = focusRequester
     )
 
