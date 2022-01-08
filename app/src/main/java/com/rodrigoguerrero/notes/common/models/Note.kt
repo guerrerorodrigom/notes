@@ -8,6 +8,6 @@ data class Note(
     val content: String,
     val createdDate: Long,
     val modifiedDate: Long,
-    val isHidden: Boolean,
+    val isDeleted: Boolean,
     val isArchived: Boolean
 )

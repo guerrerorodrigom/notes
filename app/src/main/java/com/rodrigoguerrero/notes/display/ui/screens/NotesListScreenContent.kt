@@ -20,6 +20,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.rodrigoguerrero.notes.R
+import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ALL_NOTES
 import com.rodrigoguerrero.notes.app.ui.components.MainDrawerMenu
 import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
@@ -27,15 +28,18 @@ import com.rodrigoguerrero.notes.common.ui.components.FullScreenLottie
 import com.rodrigoguerrero.notes.common.ui.components.MainScaffold
 import com.rodrigoguerrero.notes.display.ui.components.*
 import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import java.util.*
 
+@FlowPreview
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
 fun NotesListScreen(
     onNoteClicked: (UUID) -> Unit,
-    onCreateNote: () -> Unit
+    onCreateNote: () -> Unit,
+    navigateTo: (String) -> Unit
 ) {
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes: List<Note> by viewModel.notes.collectAsState(initial = emptyList())
@@ -48,6 +52,8 @@ fun NotesListScreen(
     )
     val isListMode by viewModel.isListMode.collectAsState(true)
     val listModeIcon by viewModel.listModeIcon.observeAsState(Icons.Filled.GridView)
+    val title by viewModel.title.collectAsState(R.string.main_top_bar_title)
+    val selectedMenu by viewModel.selectedMenu.collectAsState(ALL_NOTES)
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
@@ -62,18 +68,22 @@ fun NotesListScreen(
                             scaffoldState.drawerState.open()
                         }
                     },
-                    onToggleDisplayMode = { viewModel.toggleListMode() }
+                    onToggleDisplayMode = { viewModel.toggleListMode() },
+                    title = title
                 )
             },
             bottomBar = { NotesListBottomAppBar(onBottomAppIconClicked = {}) },
             drawer = {
                 MainDrawerMenu(
                     onNavigateFromMenu = { destination ->
+                        if (!viewModel.handleNoteDisplayType(destination)) {
+                            navigateTo(destination)
+                        }
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
                     },
-                    currentRoute = "",
+                    currentRoute = selectedMenu,
                 )
             }, scaffoldState = scaffoldState
         ) { padding ->

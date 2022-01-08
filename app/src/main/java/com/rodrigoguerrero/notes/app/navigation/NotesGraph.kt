@@ -46,6 +46,9 @@ fun NotesGraph() {
                 },
                 onCreateNote = {
                     navController.navigate(CREATE_TEXT_NOTE)
+                },
+                navigateTo = {
+                    navController.navigate(it)
                 }
             )
         }

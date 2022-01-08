@@ -62,7 +62,7 @@ fun PreviewNoteCard() {
         content = "This is the note content and it can be very very very very very very very very very very long.",
         createdDate = Date().time,
         modifiedDate = Date().time,
-        isHidden = false,
+        isDeleted = false,
         isArchived = false
     )
     TextNoteCard(note, {})

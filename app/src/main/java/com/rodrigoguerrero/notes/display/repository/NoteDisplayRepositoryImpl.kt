@@ -20,24 +20,12 @@ class NoteDisplayRepositoryImpl @Inject constructor(
         Dispatchers.IO + SupervisorJob()
     )
 
-    override val availableNotes: SharedFlow<List<Note>> = textNotesDataSource.notes
-        .map { list ->
-            list
-                .filter { note ->
-                    !note.isHidden && !note.isArchived
-
-                }
-        }
+    override val allNotes: SharedFlow<List<Note>> = textNotesDataSource.notes
         .shareIn(
             scope = scope,
             started = SharingStarted.WhileSubscribed(),
             replay = 1
         )
-    override val hiddenNotes: SharedFlow<List<Note>>
-        get() = TODO("Not yet implemented")
-    override val archivedNotes: SharedFlow<List<Note>>
-        get() = TODO("Not yet implemented")
-
 
     override fun destroy() {
         scope.cancel()

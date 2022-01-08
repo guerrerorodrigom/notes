@@ -8,13 +8,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rodrigoguerrero.notes.R
+import com.rodrigoguerrero.notes.app.navigation.MainDestinations
+import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ALL_NOTES
+import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ARCHIVE
+import com.rodrigoguerrero.notes.app.navigation.MainDestinations.DELETED
 import com.rodrigoguerrero.notes.display.repository.NoteDisplayRepository
 import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@FlowPreview
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
     private val noteDisplayRepository: NoteDisplayRepository,
@@ -29,8 +36,43 @@ class NoteListViewModel @Inject constructor(
     val isEmpty: LiveData<Boolean>
         get() = _isEmpty
 
+    private val _noteDisplayType = MutableStateFlow<NoteDisplayType>(NoteDisplayType.AllNotes)
+
+    val title = _noteDisplayType
+        .map { displayType ->
+            when (displayType) {
+                NoteDisplayType.DeletedNotes -> R.string.deleted
+                NoteDisplayType.ArchivedNotes -> R.string.archive
+                else -> R.string.main_top_bar_title
+            }
+        }
+
+    val selectedMenu = _noteDisplayType
+        .map { displayType ->
+            when (displayType) {
+                NoteDisplayType.DeletedNotes -> DELETED
+                NoteDisplayType.ArchivedNotes -> ARCHIVE
+                NoteDisplayType.AllNotes -> ALL_NOTES
+            }
+        }
+
     val notes = noteDisplayRepository
-        .availableNotes
+        .allNotes
+        .combine(_noteDisplayType) { list, displayType ->
+            list.filter { note ->
+                when (displayType) {
+                    NoteDisplayType.DeletedNotes -> {
+                        note.isDeleted
+                    }
+                    NoteDisplayType.ArchivedNotes -> {
+                        note.isArchived
+                    }
+                    else -> {
+                        !note.isArchived && !note.isDeleted
+                    }
+                }
+            }
+        }
         .distinctUntilChanged()
         .onEach {
             _isEmpty.value = it.isEmpty()
@@ -58,6 +100,24 @@ class NoteListViewModel @Inject constructor(
     fun toggleListMode() {
         viewModelScope.launch {
             notesDataStoreManager.toggleListMode()
+        }
+    }
+
+    fun handleNoteDisplayType(destination: String): Boolean {
+        return when (destination) {
+            ALL_NOTES -> {
+                _noteDisplayType.value = NoteDisplayType.AllNotes
+                true
+            }
+            ARCHIVE -> {
+                _noteDisplayType.value = NoteDisplayType.ArchivedNotes
+                true
+            }
+            DELETED -> {
+                _noteDisplayType.value = NoteDisplayType.DeletedNotes
+                true
+            }
+            else -> false
         }
     }
 

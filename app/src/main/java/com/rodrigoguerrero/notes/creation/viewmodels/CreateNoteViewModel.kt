@@ -55,7 +55,7 @@ class CreateNoteViewModel @Inject constructor(
                     content = _content.value,
                     createdDate = Date().time,
                     modifiedDate = Date().time,
-                    isHidden = false,
+                    isDeleted = false,
                     isArchived = false,
                     id = UUID.randomUUID()
                 )

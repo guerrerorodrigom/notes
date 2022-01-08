@@ -1,5 +1,6 @@
 package com.rodrigoguerrero.notes.display.ui.components
 
+import androidx.annotation.StringRes
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -14,12 +15,13 @@ import com.rodrigoguerrero.notes.common.ui.topBarElevation
 @Composable
 fun DisplayNotesTopBar(
     listModeIcon: ImageVector,
+    @StringRes title: Int,
     onToggleDisplayMode: () -> Unit,
     onNavigationIconClicked: () -> Unit
 ) {
     TopAppBar(
         elevation = topBarElevation,
-        title = { Text(text = stringResource(R.string.main_top_bar_title)) },
+        title = { Text(text = stringResource(title)) },
         backgroundColor = MaterialTheme.colors.primarySurface,
         navigationIcon = {
             IconButton(onClick = onNavigationIconClicked) {

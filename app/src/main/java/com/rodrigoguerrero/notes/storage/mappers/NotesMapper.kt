@@ -11,7 +11,7 @@ internal fun Note.toTextNoteEntity() =
         dateCreated = createdDate,
         dateModified = modifiedDate,
         isNoteArchived = isArchived,
-        isNoteHidden = isHidden
+        isNoteHidden = isDeleted
     )
 
 internal fun TextNoteEntity.toNote() =
@@ -22,5 +22,5 @@ internal fun TextNoteEntity.toNote() =
         createdDate = dateCreated,
         modifiedDate = dateModified,
         isArchived = isNoteArchived,
-        isHidden = isNoteHidden
+        isDeleted = isNoteHidden
     )
