@@ -56,6 +56,10 @@ class EditNoteViewModel @Inject constructor(
             status == NoteOperationStatus.Success || saveWithNoChanges
         }
 
+    val archiveNote: Flow<NoteOperationStatus> = textNoteCreationRepository
+        .noteOperationStatus
+        .filter { it is NoteOperationStatus.Archived || it is NoteOperationStatus.Unarchived }
+
     fun getNote(uuid: UUID) {
         viewModelScope.launch {
             textNoteCreationRepository.getNote(uuid)
@@ -73,7 +77,7 @@ class EditNoteViewModel @Inject constructor(
     fun onArchiveUnarchive(note: Note?) {
         viewModelScope.launch {
             note?.let {
-                textNoteCreationRepository.upsertTextNote(it.copy(isArchived = !it.isArchived))
+                textNoteCreationRepository.toggleArchiveState(it)
             }
         }
     }

@@ -22,6 +22,16 @@ class NoteCreationRepositoryImpl @Inject constructor(
         _status.emit(NoteOperationStatus.Success)
     }
 
+    override suspend fun toggleArchiveState(note: Note) {
+        textNotesDataSource.addNote(note.copy(isArchived = !note.isArchived))
+        val status = if (note.isArchived) {
+            NoteOperationStatus.Unarchived
+        } else {
+            NoteOperationStatus.Archived
+        }
+        _status.emit(status)
+    }
+
     override suspend fun getNote(uuid: UUID) {
         _status.emit(NoteOperationStatus.Processing)
         textNotesDataSource

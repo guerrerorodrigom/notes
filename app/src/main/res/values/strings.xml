@@ -25,4 +25,7 @@
   <string name="cancel">Cancel</string>
   <string name="unsaved_note">Unsaved Note</string>
   <string name="unsaved_note_content">This note has changed. Do you want to save your changes?</string>
+  <string name="note_archived">Note has been archived</string>
+  <string name="note_unarchived">Note has been unarchived</string>
+  <string name="undo">Undo</string>
 </resources>

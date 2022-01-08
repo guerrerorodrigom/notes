@@ -1,22 +1,20 @@
 package com.rodrigoguerrero.notes.creation.ui.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.primarySurface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.components.BackNavigationIcon
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
 import com.rodrigoguerrero.notes.common.ui.components.MainScaffold
 import com.rodrigoguerrero.notes.common.ui.topBarElevation
+import com.rodrigoguerrero.notes.creation.repository.NoteOperationStatus
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteFields
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteTopAppBarActions
 import com.rodrigoguerrero.notes.creation.viewmodels.EditNoteViewModel
@@ -36,6 +34,12 @@ fun EditNoteScreen(
     val progress by viewModel.progress.observeAsState(true)
     val saveCompleted by viewModel.saveCompleted.collectAsState(false)
     val archiveIcon by viewModel.archiveIcon.collectAsState(Icons.Filled.Archive)
+    val noteArchivedStatus by viewModel.archiveNote.collectAsState(null)
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val archivedMessage = stringResource(R.string.note_archived)
+    val unarchivedMessage = stringResource(R.string.note_unarchived)
+    val undoMessage = stringResource(R.string.undo)
     val scope = rememberCoroutineScope()
     val focusRequester = FocusRequester()
 
@@ -57,7 +61,8 @@ fun EditNoteScreen(
                 },
                 title = {}
             )
-        }
+        },
+        scaffoldState = scaffoldState
     ) {
         when {
             saveCompleted -> {
@@ -80,6 +85,22 @@ fun EditNoteScreen(
             )
             BackHandler {
                 viewModel.save()
+            }
+        }
+
+        LaunchedEffect(noteArchivedStatus) {
+            noteArchivedStatus?.let {
+                val message = when (noteArchivedStatus) {
+                    is NoteOperationStatus.Archived -> archivedMessage
+                    is NoteOperationStatus.Unarchived -> unarchivedMessage
+                    else -> ""
+                }
+                when (snackbarHostState.showSnackbar(message, undoMessage)) {
+                    SnackbarResult.ActionPerformed -> {
+                        viewModel.onArchiveUnarchive(noteToEdit)
+                    }
+                    SnackbarResult.Dismissed -> {}
+                }
             }
         }
     }

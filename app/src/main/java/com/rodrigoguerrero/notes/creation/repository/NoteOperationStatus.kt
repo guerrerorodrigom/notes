@@ -7,4 +7,6 @@ sealed class NoteOperationStatus {
     data class Retrieved(val note: Note) : NoteOperationStatus()
     object Processing : NoteOperationStatus()
     object Failure : NoteOperationStatus()
+    object Archived : NoteOperationStatus()
+    object Unarchived : NoteOperationStatus()
 }
