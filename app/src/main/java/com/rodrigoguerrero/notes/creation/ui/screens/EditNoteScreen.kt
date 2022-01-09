@@ -15,6 +15,7 @@ import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
 import com.rodrigoguerrero.notes.common.ui.components.MainScaffold
 import com.rodrigoguerrero.notes.common.ui.topBarElevation
 import com.rodrigoguerrero.notes.creation.repository.NoteOperationStatus
+import com.rodrigoguerrero.notes.creation.ui.components.EditNoteBottomBar
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteFields
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteTopAppBarActions
 import com.rodrigoguerrero.notes.creation.viewmodels.EditNoteViewModel
@@ -65,6 +66,7 @@ fun EditNoteScreen(
                 title = {}
             )
         },
+        bottomBar = { EditNoteBottomBar() },
         scaffoldState = scaffoldState
     ) {
         when {

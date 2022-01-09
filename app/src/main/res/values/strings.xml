@@ -28,4 +28,7 @@
   <string name="note_archived">Note has been archived</string>
   <string name="note_unarchived">Note has been unarchived</string>
   <string name="undo">Undo</string>
+  <string name="more_options">More Options</string>
+  <string name="note_colors">Note colors</string>
+  <string name="other_options">Other options</string>
 </resources>
