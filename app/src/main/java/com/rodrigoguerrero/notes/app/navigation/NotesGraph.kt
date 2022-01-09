@@ -17,7 +17,6 @@ import com.rodrigoguerrero.notes.configuration.ui.screens.SettingsScreen
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CREATE_TEXT_NOTE
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.EDIT_TEXT_NOTE
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.EDIT_TEXT_NOTE_UUID
-import com.rodrigoguerrero.notes.creation.ui.screens.CreateNoteScreenContent
 import com.rodrigoguerrero.notes.creation.ui.screens.EditNoteScreen
 import com.rodrigoguerrero.notes.display.ui.screens.ArchiveScreen
 import com.rodrigoguerrero.notes.display.ui.screens.DeletedScreen
@@ -74,7 +73,7 @@ fun NotesGraph() {
             }
         }
         composable(CREATE_TEXT_NOTE) {
-            CreateNoteScreenContent {
+            EditNoteScreen(uuid = null) {
                 navController.popBackStack(CREATE_TEXT_NOTE, inclusive = true)
             }
         }

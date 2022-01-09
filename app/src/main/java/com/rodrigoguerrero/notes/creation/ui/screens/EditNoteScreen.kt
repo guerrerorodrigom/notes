@@ -26,7 +26,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 @Composable
 fun EditNoteScreen(
-    uuid: UUID,
+    uuid: UUID?,
     onBackPressed: () -> Unit
 ) {
     val viewModel: EditNoteViewModel = hiltViewModel()
@@ -50,7 +50,10 @@ fun EditNoteScreen(
                 backgroundColor = MaterialTheme.colors.primarySurface,
                 navigationIcon = {
                     BackNavigationIcon {
-                        viewModel.save()
+                        noteToEdit?.let {
+                            viewModel.save()
+                        }
+                        onBackPressed()
                     }
                 },
                 actions = {
@@ -65,27 +68,27 @@ fun EditNoteScreen(
         scaffoldState = scaffoldState
     ) {
         when {
-            saveCompleted -> {
-                onBackPressed()
-            }
             progress -> {
                 FulLScreenProgress()
-                viewModel.getNote(uuid)
+                uuid?.let {
+                    viewModel.getNote(uuid)
+                }
             }
         }
 
-        noteToEdit?.let { note ->
-            EditNoteFields(
-                title = note.title.orEmpty(),
-                onTitleChanged = { viewModel.onTitleChanged(note, it) },
-                content = note.content,
-                onContentChanged = { viewModel.onContentChanged(note, it) },
-                scope = scope,
-                focusRequester = focusRequester
-            )
-            BackHandler {
+        EditNoteFields(
+            title = noteToEdit?.title.orEmpty(),
+            onTitleChanged = { viewModel.onTitleChanged(noteToEdit, it) },
+            content = noteToEdit?.content.orEmpty(),
+            onContentChanged = { viewModel.onContentChanged(noteToEdit, it) },
+            scope = scope,
+            focusRequester = focusRequester
+        )
+        BackHandler {
+            noteToEdit?.let {
                 viewModel.save()
             }
+            onBackPressed()
         }
 
         LaunchedEffect(noteArchivedStatus) {

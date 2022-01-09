@@ -66,12 +66,26 @@ class EditNoteViewModel @Inject constructor(
         }
     }
 
-    fun onTitleChanged(note: Note, title: String) {
-        _updatedNote.value = note.copy(title = title, modifiedDate = Date().time)
+    fun onTitleChanged(note: Note?, title: String) {
+        _updatedNote.value = note?.copy(title = title, modifiedDate = Date().time) ?: Note(
+            title = title,
+            createdDate = Date().time,
+            modifiedDate = Date().time,
+            content = "",
+            isArchived = false,
+            isDeleted = false
+        )
     }
 
-    fun onContentChanged(note: Note, content: String) {
-        _updatedNote.value = note.copy(content = content, modifiedDate = Date().time)
+    fun onContentChanged(note: Note?, content: String) {
+        _updatedNote.value = note?.copy(content = content, modifiedDate = Date().time) ?: Note(
+            title = "",
+            createdDate = Date().time,
+            modifiedDate = Date().time,
+            content = content,
+            isArchived = false,
+            isDeleted = false
+        )
     }
 
     fun onArchiveUnarchive(note: Note?) {

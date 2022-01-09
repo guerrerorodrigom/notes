@@ -30,7 +30,11 @@ fun TextNoteCard(
             .padding(horizontal = padding8, vertical = padding4)
             .fillMaxWidth(),
         elevation = cardElevation,
-        onClick = { onNoteClicked(note.id) }
+        onClick = {
+            note.id?.let { id ->
+                onNoteClicked(id)
+            }
+        }
     ) {
         Column(
             modifier = Modifier.padding(padding16)

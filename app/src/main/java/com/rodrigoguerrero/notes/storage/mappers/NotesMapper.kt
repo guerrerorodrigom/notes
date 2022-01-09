@@ -2,10 +2,11 @@ package com.rodrigoguerrero.notes.storage.mappers
 
 import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.storage.entities.TextNoteEntity
+import java.util.*
 
 internal fun Note.toTextNoteEntity() =
     TextNoteEntity(
-        id = id,
+        id = id ?: UUID.randomUUID(),
         title = title,
         content = content,
         dateCreated = createdDate,
