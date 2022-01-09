@@ -7,8 +7,6 @@ val padding8 = 8.dp
 val padding4 = 4.dp
 
 val cardElevation = 10.dp
-val topBarElevation = 4.dp
-val bottomBarElevation = 22.dp
 
 val drawerMenuItemRoundedCorner = 50.dp
 val drawerMenuTopSpace = 24.dp
@@ -16,3 +14,6 @@ val drawerMenuTopSpace = 24.dp
 val maxColumnWithStaggeredGrid = 220.dp
 
 val fabBottomPadding = 12.dp
+
+val colorSelectorSize = 32.dp
+val colorSelectorBorderSize = 3.dp

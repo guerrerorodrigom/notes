@@ -7,10 +7,11 @@ import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.rodrigoguerrero.notes.app.ui.models.bottomBarItems
-import com.rodrigoguerrero.notes.common.ui.bottomBarElevation
 import com.rodrigoguerrero.notes.app.theme.NotesTheme
 
 @Composable
@@ -21,8 +22,8 @@ fun NotesListBottomAppBar(
     BottomAppBar(
         modifier = modifier,
         cutoutShape = CircleShape,
-        backgroundColor = MaterialTheme.colors.surface,
-        elevation = bottomBarElevation
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
     ) {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             bottomBarItems.forEach { item ->

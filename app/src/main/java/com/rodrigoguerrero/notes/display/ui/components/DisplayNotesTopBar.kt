@@ -7,10 +7,11 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.rodrigoguerrero.notes.R
-import com.rodrigoguerrero.notes.common.ui.topBarElevation
 
 @Composable
 fun DisplayNotesTopBar(
@@ -20,9 +21,9 @@ fun DisplayNotesTopBar(
     onNavigationIconClicked: () -> Unit
 ) {
     TopAppBar(
-        elevation = topBarElevation,
         title = { Text(text = stringResource(title)) },
-        backgroundColor = MaterialTheme.colors.primarySurface,
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
         navigationIcon = {
             IconButton(onClick = onNavigationIconClicked) {
                 Icon(Icons.Filled.Menu, stringResource(R.string.open_drawer_menu_icon))

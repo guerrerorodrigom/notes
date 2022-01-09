@@ -4,13 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = "text_notes")
-data class TextNoteEntity(
+@Entity(tableName = "notes")
+data class NoteEntity(
     @PrimaryKey val id: UUID,
     val title: String? = null,
     val content: String,
     val dateCreated: Long,
     val dateModified: Long,
     val isNoteArchived: Boolean,
-    val isNoteHidden: Boolean
+    val isNoteDeleted: Boolean,
+    val color: Int
 )

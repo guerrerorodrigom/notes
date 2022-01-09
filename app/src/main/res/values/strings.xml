@@ -31,4 +31,5 @@
   <string name="more_options">More Options</string>
   <string name="note_colors">Note colors</string>
   <string name="other_options">Other options</string>
+  <string name="note_color">Color</string>
 </resources>

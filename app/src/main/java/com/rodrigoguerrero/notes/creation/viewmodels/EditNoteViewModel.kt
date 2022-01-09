@@ -3,6 +3,8 @@ package com.rodrigoguerrero.notes.creation.viewmodels
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Unarchive
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.creation.repository.NoteCreationRepository
 import com.rodrigoguerrero.notes.creation.repository.NoteOperationStatus
+import com.rodrigoguerrero.notes.creation.ui.screens.BottomSheetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -39,6 +42,19 @@ class EditNoteViewModel @Inject constructor(
     val progress: LiveData<Boolean>
         get() = _progress
 
+    private val _bottomSheetType = MutableStateFlow<BottomSheetType?>(null)
+    val bottomSheetType: StateFlow<BottomSheetType?>
+        get() = _bottomSheetType
+
+    private val _noteColor = MutableStateFlow(Color.Transparent)
+    val noteColor = note.combine(_noteColor) { note, color ->
+        if (note != null && note.color != 0) {
+            Color(note.color)
+        } else {
+            color
+        }
+    }
+
     val archiveIcon: Flow<ImageVector>
         get() = note
             .map {
@@ -48,13 +64,6 @@ class EditNoteViewModel @Inject constructor(
                     Icons.Filled.Archive
                 }
             }
-
-    private val noChanges = MutableStateFlow(false)
-    val saveCompleted = textNoteCreationRepository
-        .noteOperationStatus
-        .combine(noChanges) { status, saveWithNoChanges ->
-            status == NoteOperationStatus.Success || saveWithNoChanges
-        }
 
     val archiveNote: Flow<NoteOperationStatus> = textNoteCreationRepository
         .noteOperationStatus
@@ -73,7 +82,8 @@ class EditNoteViewModel @Inject constructor(
             modifiedDate = Date().time,
             content = "",
             isArchived = false,
-            isDeleted = false
+            isDeleted = false,
+            color = _noteColor.value.toArgb()
         )
     }
 
@@ -84,7 +94,8 @@ class EditNoteViewModel @Inject constructor(
             modifiedDate = Date().time,
             content = content,
             isArchived = false,
-            isDeleted = false
+            isDeleted = false,
+            color = _noteColor.value.toArgb()
         )
     }
 
@@ -96,11 +107,28 @@ class EditNoteViewModel @Inject constructor(
         }
     }
 
+    fun onNoteColorSelected(note: Note?, color: Color) {
+        _updatedNote.value = note?.copy(color = color.toArgb()) ?: Note(
+            title = "",
+            createdDate = Date().time,
+            modifiedDate = Date().time,
+            content = "",
+            isArchived = false,
+            isDeleted = false,
+            color = color.toArgb()
+        )
+        _noteColor.value = color
+    }
+
     fun save() {
         viewModelScope.launch {
             _updatedNote.value?.let {
                 textNoteCreationRepository.upsertTextNote(it)
-            } ?: noChanges.emit(true)
+            }
         }
+    }
+
+    fun setBottomSheetType(bottomSheetType: BottomSheetType) {
+        _bottomSheetType.value = bottomSheetType
     }
 }

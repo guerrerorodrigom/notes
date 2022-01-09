@@ -13,12 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ALL_NOTES
 import com.rodrigoguerrero.notes.app.ui.components.MainDrawerMenu
@@ -56,6 +58,7 @@ fun NotesListScreen(
     val selectedMenu by viewModel.selectedMenu.collectAsState(ALL_NOTES)
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
+    val systemUiController = rememberSystemUiController()
 
     ProvideWindowInsets {
         MainScaffold(
@@ -87,6 +90,7 @@ fun NotesListScreen(
                 )
             }, scaffoldState = scaffoldState
         ) { padding ->
+            systemUiController.setStatusBarColor(Color.Transparent, true)
             Box(modifier = Modifier.padding(padding)) {
                 when {
                     isLoading -> FulLScreenProgress()

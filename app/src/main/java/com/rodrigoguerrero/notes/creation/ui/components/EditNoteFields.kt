@@ -1,5 +1,6 @@
 package com.rodrigoguerrero.notes.creation.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,11 +27,15 @@ fun EditNoteFields(
     content: String,
     onContentChanged: (String) -> Unit,
     scope: CoroutineScope,
-    focusRequester: FocusRequester
+    focusRequester: FocusRequester,
+    backgroundColor: Color,
+    modifier: Modifier = Modifier
 ) {
     Surface {
         Column(
-            modifier = Modifier.fillMaxHeight()
+            modifier = modifier
+                .fillMaxHeight()
+                .background(backgroundColor)
         ) {
             TextField(
                 value = title,

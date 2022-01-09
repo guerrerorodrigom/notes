@@ -1,5 +1,6 @@
 package com.rodrigoguerrero.notes.display.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.rodrigoguerrero.notes.common.models.Note
@@ -37,7 +39,9 @@ fun TextNoteCard(
         }
     ) {
         Column(
-            modifier = Modifier.padding(padding16)
+            modifier = Modifier
+                .background(Color(note.color))
+                .padding(padding16)
         ) {
             if (note.title?.isNotEmpty() == true) {
                 Text(
@@ -67,7 +71,8 @@ fun PreviewNoteCard() {
         createdDate = Date().time,
         modifiedDate = Date().time,
         isDeleted = false,
-        isArchived = false
+        isArchived = false,
+        color = Color.Transparent.value.toInt()
     )
     TextNoteCard(note, {})
 }

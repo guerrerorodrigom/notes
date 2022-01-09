@@ -7,9 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ALL_NOTES
-import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ARCHIVE
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.DEFAULT
-import com.rodrigoguerrero.notes.app.navigation.MainDestinations.DELETED
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.NOTEBOOKS
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.SETTINGS
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.TAGS
@@ -18,8 +16,6 @@ import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.CR
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.EDIT_TEXT_NOTE
 import com.rodrigoguerrero.notes.creation.navigation.NoteCreationDestinations.EDIT_TEXT_NOTE_UUID
 import com.rodrigoguerrero.notes.creation.ui.screens.EditNoteScreen
-import com.rodrigoguerrero.notes.display.ui.screens.ArchiveScreen
-import com.rodrigoguerrero.notes.display.ui.screens.DeletedScreen
 import com.rodrigoguerrero.notes.display.ui.screens.NotesListScreen
 import com.rodrigoguerrero.notes.tags.ui.screens.TagsScreen
 import com.rodrigoguerrero.notes.ui.screens.NotebooksScreen
@@ -50,12 +46,6 @@ fun NotesGraph() {
                     navController.navigate(it)
                 }
             )
-        }
-        composable(ARCHIVE) {
-            ArchiveScreen()
-        }
-        composable(DELETED) {
-            DeletedScreen()
         }
         composable(NOTEBOOKS) {
             NotebooksScreen()

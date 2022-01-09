@@ -1,33 +1,33 @@
 package com.rodrigoguerrero.notes.creation.ui.components
 
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddBox
-import androidx.compose.material.icons.outlined.More
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.rodrigoguerrero.notes.R
-import com.rodrigoguerrero.notes.common.ui.bottomBarElevation
 import com.rodrigoguerrero.notes.display.ui.components.BottomAppBarIcon
 
 @Composable
 fun EditNoteBottomBar(
+    onShowColorSelector: () -> Unit,
+    backgroundColor: Color,
     modifier: Modifier = Modifier
 ) {
     BottomAppBar(
         modifier = modifier,
-        backgroundColor = MaterialTheme.colors.surface,
-        elevation = bottomBarElevation
+        backgroundColor = backgroundColor,
+        elevation = 0.dp
     ) {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             BottomAppBarIcon(
@@ -36,7 +36,7 @@ fun EditNoteBottomBar(
                 description = stringResource(R.string.more_options)
             )
             BottomAppBarIcon(
-                onClick = { },
+                onClick = onShowColorSelector,
                 icon = Icons.Outlined.Palette,
                 description = stringResource(R.string.note_colors)
             )
@@ -55,5 +55,5 @@ fun EditNoteBottomBar(
 @Preview
 @Composable
 fun PreviewEditNoteBottomBar() {
-    EditNoteBottomBar()
+    EditNoteBottomBar(onShowColorSelector = {}, Color.Transparent)
 }
