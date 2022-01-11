@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 @Dao
-interface TextNotesDao {
+interface NotesDao {
 
     @Query("SELECT * FROM notes WHERE isNoteArchived = 0 AND isNoteDeleted = 0 ORDER BY dateModified DESC")
     fun getAvailable(): Flow<List<NoteEntity>>

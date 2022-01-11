@@ -3,9 +3,9 @@ package com.rodrigoguerrero.notes.storage.di
 import android.content.Context
 import androidx.room.Room
 import com.rodrigoguerrero.notes.storage.NotesDatabase
-import com.rodrigoguerrero.notes.storage.dao.TextNotesDao
-import com.rodrigoguerrero.notes.storage.datasources.TextNotesDataSource
-import com.rodrigoguerrero.notes.storage.datasources.TextNotesDataSourceImpl
+import com.rodrigoguerrero.notes.storage.dao.NotesDao
+import com.rodrigoguerrero.notes.storage.datasources.NotesDataSource
+import com.rodrigoguerrero.notes.storage.datasources.NotesDataSourceImpl
 import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManager
 import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManagerImpl
 import dagger.Binds
@@ -20,8 +20,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 abstract class StorageAbstractModule {
     @Binds
     abstract fun bindTextNotesDataSource(
-        textNotesDataSource: TextNotesDataSourceImpl
-    ): TextNotesDataSource
+        textNotesDataSource: NotesDataSourceImpl
+    ): NotesDataSource
 
     @Binds
     abstract fun bindNotesDataStoreManager(
@@ -44,5 +44,5 @@ object StorageModule {
             .build()
 
     @Provides
-    fun provideTextNotesDao(database: NotesDatabase): TextNotesDao = database.textNotesDao()
+    fun provideTextNotesDao(database: NotesDatabase): NotesDao = database.notesDao()
 }

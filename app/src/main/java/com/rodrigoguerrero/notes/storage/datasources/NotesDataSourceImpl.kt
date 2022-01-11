@@ -1,17 +1,17 @@
 package com.rodrigoguerrero.notes.storage.datasources
 
 import com.rodrigoguerrero.notes.common.models.Note
-import com.rodrigoguerrero.notes.storage.dao.TextNotesDao
+import com.rodrigoguerrero.notes.storage.dao.NotesDao
 import com.rodrigoguerrero.notes.storage.mappers.toNote
 import com.rodrigoguerrero.notes.storage.mappers.toTextNoteEntity
 import kotlinx.coroutines.flow.*
 import java.util.*
 import javax.inject.Inject
 
-class TextNotesDataSourceImpl @Inject constructor(
-    private val textNotesDao: TextNotesDao
-) : TextNotesDataSource {
-    override val notes: Flow<List<Note>> = textNotesDao
+class NotesDataSourceImpl @Inject constructor(
+    private val notesDao: NotesDao
+) : NotesDataSource {
+    override val notes: Flow<List<Note>> = notesDao
         .getAvailable()
         .map { list ->
             list.map { entity ->
@@ -19,7 +19,7 @@ class TextNotesDataSourceImpl @Inject constructor(
             }
         }
 
-    override val archivedNotes: Flow<List<Note>> = textNotesDao
+    override val archivedNotes: Flow<List<Note>> = notesDao
         .getArchived()
         .map { list ->
             list.map { entity ->
@@ -27,7 +27,7 @@ class TextNotesDataSourceImpl @Inject constructor(
             }
         }
 
-    override val deletedNotes: Flow<List<Note>> = textNotesDao
+    override val deletedNotes: Flow<List<Note>> = notesDao
         .getDeleted()
         .map { list ->
             list.map { entity ->
@@ -36,10 +36,10 @@ class TextNotesDataSourceImpl @Inject constructor(
         }
 
     override suspend fun addNote(note: Note) {
-        textNotesDao.insertNote(note = note.toTextNoteEntity())
+        notesDao.insertNote(note = note.toTextNoteEntity())
     }
 
     override suspend fun getNote(uuid: UUID): Flow<Note> {
-        return textNotesDao.getNote(uuid).map { it.toNote() }
+        return notesDao.getNote(uuid).map { it.toNote() }
     }
 }

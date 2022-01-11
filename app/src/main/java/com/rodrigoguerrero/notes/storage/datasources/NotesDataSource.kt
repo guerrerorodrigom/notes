@@ -4,7 +4,7 @@ import com.rodrigoguerrero.notes.common.models.Note
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
-interface TextNotesDataSource {
+interface NotesDataSource {
 
     val notes: Flow<List<Note>>
     val deletedNotes: Flow<List<Note>>

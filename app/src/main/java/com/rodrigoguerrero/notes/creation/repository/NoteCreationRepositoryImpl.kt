@@ -1,7 +1,7 @@
 package com.rodrigoguerrero.notes.creation.repository
 
 import com.rodrigoguerrero.notes.common.models.Note
-import com.rodrigoguerrero.notes.storage.datasources.TextNotesDataSource
+import com.rodrigoguerrero.notes.storage.datasources.NotesDataSource
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import java.util.*
@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @FlowPreview
 class NoteCreationRepositoryImpl @Inject constructor(
-    private val textNotesDataSource: TextNotesDataSource
+    private val notesDataSource: NotesDataSource
 ) : NoteCreationRepository {
 
     private val _status = MutableSharedFlow<NoteOperationStatus>()
@@ -18,12 +18,12 @@ class NoteCreationRepositoryImpl @Inject constructor(
 
     override suspend fun upsertTextNote(note: Note) {
         _status.emit(NoteOperationStatus.Processing)
-        textNotesDataSource.addNote(note)
+        notesDataSource.addNote(note)
         _status.emit(NoteOperationStatus.Success)
     }
 
     override suspend fun toggleArchiveState(note: Note) {
-        textNotesDataSource.addNote(note.copy(isArchived = !note.isArchived))
+        notesDataSource.addNote(note.copy(isArchived = !note.isArchived))
         val status = if (note.isArchived) {
             NoteOperationStatus.Unarchived
         } else {
@@ -34,7 +34,7 @@ class NoteCreationRepositoryImpl @Inject constructor(
 
     override suspend fun getNote(uuid: UUID) {
         _status.emit(NoteOperationStatus.Processing)
-        textNotesDataSource
+        notesDataSource
             .getNote(uuid)
             .collect { note ->
                 _status.emit(NoteOperationStatus.Retrieved(note))
