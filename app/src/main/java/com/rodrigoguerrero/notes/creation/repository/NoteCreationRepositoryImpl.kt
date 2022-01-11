@@ -35,15 +35,7 @@ class NoteCreationRepositoryImpl @Inject constructor(
     override suspend fun getNote(uuid: UUID) {
         _status.emit(NoteOperationStatus.Processing)
         textNotesDataSource
-            .notes
-            .flatMapConcat { list ->
-                list
-                    .filter { note ->
-                        note.id == uuid
-                    }
-                    .asFlow()
-                    .map { it }
-            }
+            .getNote(uuid)
             .collect { note ->
                 _status.emit(NoteOperationStatus.Retrieved(note))
             }

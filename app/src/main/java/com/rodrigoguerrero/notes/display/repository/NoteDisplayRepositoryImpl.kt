@@ -20,7 +20,21 @@ class NoteDisplayRepositoryImpl @Inject constructor(
         Dispatchers.IO + SupervisorJob()
     )
 
-    override val allNotes: SharedFlow<List<Note>> = textNotesDataSource.notes
+    override val availableNotes: SharedFlow<List<Note>> = textNotesDataSource.notes
+        .shareIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+
+    override val archivedNotes: SharedFlow<List<Note>> = textNotesDataSource.archivedNotes
+        .shareIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+
+    override val deletedNotes: SharedFlow<List<Note>> = textNotesDataSource.deletedNotes
         .shareIn(
             scope = scope,
             started = SharingStarted.WhileSubscribed(),

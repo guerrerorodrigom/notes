@@ -12,7 +12,23 @@ class TextNotesDataSourceImpl @Inject constructor(
     private val textNotesDao: TextNotesDao
 ) : TextNotesDataSource {
     override val notes: Flow<List<Note>> = textNotesDao
-        .getAll()
+        .getAvailable()
+        .map { list ->
+            list.map { entity ->
+                entity.toNote()
+            }
+        }
+
+    override val archivedNotes: Flow<List<Note>> = textNotesDao
+        .getArchived()
+        .map { list ->
+            list.map { entity ->
+                entity.toNote()
+            }
+        }
+
+    override val deletedNotes: Flow<List<Note>> = textNotesDao
+        .getDeleted()
         .map { list ->
             list.map { entity ->
                 entity.toNote()
@@ -21,5 +37,9 @@ class TextNotesDataSourceImpl @Inject constructor(
 
     override suspend fun addNote(note: Note) {
         textNotesDao.insertNote(note = note.toTextNoteEntity())
+    }
+
+    override suspend fun getNote(uuid: UUID): Flow<Note> {
+        return textNotesDao.getNote(uuid).map { it.toNote() }
     }
 }

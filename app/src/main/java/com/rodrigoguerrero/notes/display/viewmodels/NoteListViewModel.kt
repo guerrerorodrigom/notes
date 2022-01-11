@@ -9,18 +9,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rodrigoguerrero.notes.R
-import com.rodrigoguerrero.notes.app.navigation.MainDestinations
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ALL_NOTES
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ARCHIVE
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.DELETED
 import com.rodrigoguerrero.notes.display.repository.NoteDisplayRepository
 import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
@@ -56,23 +57,27 @@ class NoteListViewModel @Inject constructor(
             }
         }
 
-    val notes = noteDisplayRepository
-        .allNotes
-        .combine(_noteDisplayType) { list, displayType ->
-            list.filter { note ->
-                when (displayType) {
-                    NoteDisplayType.DeletedNotes -> {
-                        note.isDeleted
-                    }
-                    NoteDisplayType.ArchivedNotes -> {
-                        note.isArchived
-                    }
-                    else -> {
-                        !note.isArchived && !note.isDeleted
-                    }
-                }
+    private val deletedNotes = noteDisplayRepository
+        .deletedNotes
+        .distinctUntilChanged()
+
+    private val archivedNotes = noteDisplayRepository
+        .archivedNotes
+        .distinctUntilChanged()
+
+    private val availableNotes = noteDisplayRepository
+        .availableNotes
+        .distinctUntilChanged()
+
+    val notes = _noteDisplayType
+        .map { displayType ->
+            when (displayType) {
+                NoteDisplayType.DeletedNotes -> deletedNotes
+                NoteDisplayType.ArchivedNotes -> archivedNotes
+                else -> availableNotes
             }
         }
+        .flatMapLatest { it }
         .distinctUntilChanged()
         .onEach {
             _isEmpty.value = it.isEmpty()

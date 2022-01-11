@@ -5,7 +5,6 @@ import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Unarchive
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,15 +54,14 @@ class EditNoteViewModel @Inject constructor(
         }
     }
 
-    val archiveIcon: Flow<ImageVector>
-        get() = note
-            .map {
-                if (it?.isArchived == true) {
-                    Icons.Filled.Unarchive
-                } else {
-                    Icons.Filled.Archive
-                }
+    val archiveIcon = note
+        .map {
+            if (it?.isArchived == true) {
+                Icons.Filled.Unarchive
+            } else {
+                Icons.Filled.Archive
             }
+        }
 
     val archiveNote: Flow<NoteOperationStatus> = textNoteCreationRepository
         .noteOperationStatus

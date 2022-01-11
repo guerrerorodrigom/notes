@@ -11,8 +11,14 @@ import java.util.*
 @Dao
 interface TextNotesDao {
 
-    @Query("SELECT * FROM notes ORDER BY dateModified DESC")
-    fun getAll(): Flow<List<NoteEntity>>
+    @Query("SELECT * FROM notes WHERE isNoteArchived = 0 AND isNoteDeleted = 0 ORDER BY dateModified DESC")
+    fun getAvailable(): Flow<List<NoteEntity>>
+
+    @Query("SELECT * FROM notes WHERE isNoteArchived = 1 ORDER BY dateModified DESC")
+    fun getArchived(): Flow<List<NoteEntity>>
+
+    @Query("SELECT * FROM notes WHERE isNoteDeleted = 1 ORDER BY dateModified DESC")
+    fun getDeleted(): Flow<List<NoteEntity>>
 
     @Query("SELECT * FROM notes WHERE id=:id")
     fun getNote(id: UUID): Flow<NoteEntity>

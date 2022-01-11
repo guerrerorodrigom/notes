@@ -4,7 +4,9 @@ import com.rodrigoguerrero.notes.common.models.Note
 import kotlinx.coroutines.flow.SharedFlow
 
 interface NoteDisplayRepository {
-    val allNotes: SharedFlow<List<Note>>
+    val availableNotes: SharedFlow<List<Note>>
+    val archivedNotes: SharedFlow<List<Note>>
+    val deletedNotes: SharedFlow<List<Note>>
 
     fun destroy()
 }
