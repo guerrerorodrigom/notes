@@ -3,8 +3,6 @@ package com.rodrigoguerrero.notes.display.ui.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -27,7 +25,6 @@ fun NotesList(
     LazyColumn(
         modifier = Modifier
             .padding(top = padding8)
-            .verticalScroll(rememberScrollState())
     ) {
 
         if (pinnedNotes.isNotEmpty()) {
@@ -38,18 +35,19 @@ fun NotesList(
                     modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
                 )
             }
-        }
-        items(pinnedNotes) { note ->
-            TextNoteCard(note, onNoteClicked)
+            items(pinnedNotes) { note ->
+                TextNoteCard(note, onNoteClicked)
+            }
+
+            item {
+                Text(
+                    text = stringResource(R.string.other_notes),
+                    style = MaterialTheme.typography.subtitle1,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+                )
+            }
         }
 
-        item {
-            Text(
-                text = stringResource(R.string.other_notes),
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
-            )
-        }
         items(notes) { note ->
             TextNoteCard(note, onNoteClicked)
         }
