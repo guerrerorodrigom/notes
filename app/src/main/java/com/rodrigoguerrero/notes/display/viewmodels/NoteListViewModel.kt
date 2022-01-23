@@ -12,6 +12,7 @@ import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ALL_NOTES
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.ARCHIVE
 import com.rodrigoguerrero.notes.app.navigation.MainDestinations.DELETED
+import com.rodrigoguerrero.notes.common.models.Note
 import com.rodrigoguerrero.notes.display.repository.NoteDisplayRepository
 import com.rodrigoguerrero.notes.storage.datastore.NotesDataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,6 +68,18 @@ class NoteListViewModel @Inject constructor(
 
     private val availableNotes = noteDisplayRepository
         .availableNotes
+        .distinctUntilChanged()
+
+    private val _pinnedNotes = noteDisplayRepository.pinnedNotes.distinctUntilChanged()
+
+    val pinnedNotes = _noteDisplayType
+        .map { displayType ->
+            when (displayType) {
+                NoteDisplayType.AllNotes -> _pinnedNotes
+                else -> flowOf(listOf())
+            }
+        }
+        .flatMapLatest { it }
         .distinctUntilChanged()
 
     val notes = _noteDisplayType

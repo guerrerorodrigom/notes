@@ -10,7 +10,5 @@ interface NoteCreationRepository {
 
     suspend fun upsertTextNote(note: Note)
 
-    suspend fun toggleArchiveState(note: Note)
-
     suspend fun getNote(uuid: UUID)
 }

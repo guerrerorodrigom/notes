@@ -7,6 +7,7 @@ interface NoteDisplayRepository {
     val availableNotes: SharedFlow<List<Note>>
     val archivedNotes: SharedFlow<List<Note>>
     val deletedNotes: SharedFlow<List<Note>>
+    val pinnedNotes: SharedFlow<List<Note>>
 
     fun destroy()
 }

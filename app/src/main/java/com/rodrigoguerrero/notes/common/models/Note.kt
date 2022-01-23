@@ -10,5 +10,6 @@ data class Note(
     val modifiedDate: Long,
     val isDeleted: Boolean,
     val isArchived: Boolean,
-    val color: Int
+    val color: Int,
+    val isPinned: Boolean
 )

@@ -40,6 +40,13 @@ class NoteDisplayRepositoryImpl @Inject constructor(
             replay = 1
         )
 
+    override val pinnedNotes: SharedFlow<List<Note>> = notesDataSource.pinnedNotes
+        .shareIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+
     override fun destroy() {
         scope.cancel()
     }

@@ -35,6 +35,12 @@ class NotesDataSourceImpl @Inject constructor(
             }
         }
 
+    override val pinnedNotes: Flow<List<Note>> = notesDao
+        .getAvailablePinned()
+        .map { list ->
+            list.map { entity -> entity.toNote()}
+        }
+
     override suspend fun addNote(note: Note) {
         notesDao.insertNote(note = note.toTextNoteEntity())
     }

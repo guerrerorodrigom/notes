@@ -72,7 +72,8 @@ fun PreviewNoteCard() {
         modifiedDate = Date().time,
         isDeleted = false,
         isArchived = false,
-        color = Color.Transparent.value.toInt()
+        color = Color.Transparent.value.toInt(),
+        isPinned = false
     )
     TextNoteCard(note, {})
 }

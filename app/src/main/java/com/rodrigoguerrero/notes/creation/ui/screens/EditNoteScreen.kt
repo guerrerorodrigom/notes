@@ -1,12 +1,12 @@
 package com.rodrigoguerrero.notes.creation.ui.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -20,7 +20,6 @@ import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.components.BackNavigationIcon
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
 import com.rodrigoguerrero.notes.common.ui.components.MainScaffold
-import com.rodrigoguerrero.notes.creation.repository.NoteOperationStatus
 import com.rodrigoguerrero.notes.creation.ui.components.ColorSelectorBottomSheet
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteBottomBar
 import com.rodrigoguerrero.notes.creation.ui.components.EditNoteFields
@@ -47,6 +46,7 @@ fun EditNoteScreen(
     val noteToEdit by viewModel.note.collectAsState(null)
     val progress by viewModel.progress.observeAsState(true)
     val archiveIcon by viewModel.archiveIcon.collectAsState(Icons.Filled.Archive)
+    val pinIcon by viewModel.pinIcon.collectAsState(Icons.Outlined.PushPin)
     val noteArchivedStatus by viewModel.archiveNote.collectAsState(null)
     val snackbarHostState = remember { SnackbarHostState() }
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
@@ -97,7 +97,9 @@ fun EditNoteScreen(
                     actions = {
                         EditNoteTopAppBarActions(
                             archiveIcon = archiveIcon,
-                            onArchiveUnarchive = { viewModel.onArchiveUnarchive(noteToEdit) }
+                            onArchiveUnarchive = { viewModel.onArchiveUnarchive(noteToEdit) },
+                            pinIcon = pinIcon,
+                            onPinUnpin = { viewModel.onPinUnpin(noteToEdit) }
                         )
                     },
                     title = {}
@@ -146,10 +148,10 @@ fun EditNoteScreen(
 
             LaunchedEffect(noteArchivedStatus) {
                 noteArchivedStatus?.let {
-                    val message = when (noteArchivedStatus) {
-                        is NoteOperationStatus.Archived -> archivedMessage
-                        is NoteOperationStatus.Unarchived -> unarchivedMessage
-                        else -> ""
+                    val message = if (noteArchivedStatus == true) {
+                        archivedMessage
+                    } else {
+                        unarchivedMessage
                     }
                     when (snackbarHostState.showSnackbar(message, undoMessage)) {
                         SnackbarResult.ActionPerformed -> {

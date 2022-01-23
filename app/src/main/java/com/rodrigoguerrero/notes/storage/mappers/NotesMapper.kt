@@ -13,7 +13,8 @@ internal fun Note.toTextNoteEntity() =
         dateModified = modifiedDate,
         isNoteArchived = isArchived,
         isNoteDeleted = isDeleted,
-        color = color
+        color = color,
+        isPinned = isPinned
     )
 
 internal fun NoteEntity.toNote() =
@@ -25,5 +26,6 @@ internal fun NoteEntity.toNote() =
         modifiedDate = dateModified,
         isArchived = isNoteArchived,
         isDeleted = isNoteDeleted,
-        color = color
+        color = color,
+        isPinned = isPinned
     )

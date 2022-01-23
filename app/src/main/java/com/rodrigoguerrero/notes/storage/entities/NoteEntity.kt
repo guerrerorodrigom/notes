@@ -13,5 +13,6 @@ data class NoteEntity(
     val dateModified: Long,
     val isNoteArchived: Boolean,
     val isNoteDeleted: Boolean,
-    val color: Int
+    val color: Int,
+    val isPinned: Boolean
 )

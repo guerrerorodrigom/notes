@@ -2,7 +2,9 @@ package com.rodrigoguerrero.notes.creation.viewmodels
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Unarchive
+import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.LiveData
@@ -25,10 +27,10 @@ import javax.inject.Inject
 @FlowPreview
 @HiltViewModel
 class EditNoteViewModel @Inject constructor(
-    private val textNoteCreationRepository: NoteCreationRepository
+    private val noteCreationRepository: NoteCreationRepository
 ) : ViewModel() {
 
-    private val savedNote = textNoteCreationRepository
+    private val savedNote = noteCreationRepository
         .noteOperationStatus
         .filter { it is NoteOperationStatus.Retrieved }
         .map { (it as NoteOperationStatus.Retrieved).note }
@@ -54,6 +56,14 @@ class EditNoteViewModel @Inject constructor(
         }
     }
 
+    val pinIcon = note
+        .map {
+            if (it?.isPinned == true) {
+                Icons.Filled.PushPin
+            } else {
+                Icons.Outlined.PushPin
+            }
+        }
     val archiveIcon = note
         .map {
             if (it?.isArchived == true) {
@@ -63,13 +73,14 @@ class EditNoteViewModel @Inject constructor(
             }
         }
 
-    val archiveNote: Flow<NoteOperationStatus> = textNoteCreationRepository
-        .noteOperationStatus
-        .filter { it is NoteOperationStatus.Archived || it is NoteOperationStatus.Unarchived }
+    private val _archiveNote = MutableStateFlow<Boolean?>(null)
+    val archiveNote: Flow<Boolean?> = _archiveNote
+        .filterNotNull()
+        .distinctUntilChanged()
 
     fun getNote(uuid: UUID) {
         viewModelScope.launch {
-            textNoteCreationRepository.getNote(uuid)
+            noteCreationRepository.getNote(uuid)
         }
     }
 
@@ -81,7 +92,8 @@ class EditNoteViewModel @Inject constructor(
             content = "",
             isArchived = false,
             isDeleted = false,
-            color = _noteColor.value.toArgb()
+            color = _noteColor.value.toArgb(),
+            isPinned = false
         )
     }
 
@@ -93,16 +105,20 @@ class EditNoteViewModel @Inject constructor(
             content = content,
             isArchived = false,
             isDeleted = false,
-            color = _noteColor.value.toArgb()
+            color = _noteColor.value.toArgb(),
+            isPinned = false
         )
     }
 
     fun onArchiveUnarchive(note: Note?) {
-        viewModelScope.launch {
-            note?.let {
-                textNoteCreationRepository.toggleArchiveState(it)
-            }
+        _updatedNote.value = note?.copy(isArchived = !note.isArchived)
+        note?.let {
+            _archiveNote.value = _archiveNote.value?.let { !it } ?: true
         }
+    }
+
+    fun onPinUnpin(note: Note?) {
+        _updatedNote.value = note?.copy(isPinned = !note.isPinned)
     }
 
     fun onNoteColorSelected(note: Note?, color: Color) {
@@ -113,7 +129,8 @@ class EditNoteViewModel @Inject constructor(
             content = "",
             isArchived = false,
             isDeleted = false,
-            color = color.toArgb()
+            color = color.toArgb(),
+            isPinned = false
         )
         _noteColor.value = color
     }
@@ -121,7 +138,7 @@ class EditNoteViewModel @Inject constructor(
     fun save() {
         viewModelScope.launch {
             _updatedNote.value?.let {
-                textNoteCreationRepository.upsertTextNote(it)
+                noteCreationRepository.upsertTextNote(it)
             }
         }
     }

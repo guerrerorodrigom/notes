@@ -30,10 +30,12 @@ import com.rodrigoguerrero.notes.common.ui.components.FullScreenLottie
 import com.rodrigoguerrero.notes.common.ui.components.MainScaffold
 import com.rodrigoguerrero.notes.display.ui.components.*
 import com.rodrigoguerrero.notes.display.viewmodels.NoteListViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import java.util.*
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -45,6 +47,7 @@ fun NotesListScreen(
 ) {
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes: List<Note> by viewModel.notes.collectAsState(initial = emptyList())
+    val pinnedNotes: List<Note> by viewModel.pinnedNotes.collectAsState(initial = emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isEmpty by viewModel.isEmpty.observeAsState(false)
     val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.create_note))
@@ -98,8 +101,8 @@ fun NotesListScreen(
                         composition = lottieComposition,
                         progress = lottieProgress
                     )
-                    isListMode -> NotesList(notes, onNoteClicked)
-                    !isListMode -> NotesGrid(notes, onNoteClicked)
+                    isListMode -> NotesList(notes, pinnedNotes, onNoteClicked)
+                    !isListMode -> NotesGrid(notes, pinnedNotes, onNoteClicked)
                 }
             }
         }

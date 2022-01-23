@@ -13,10 +13,12 @@ import com.rodrigoguerrero.notes.R
 @Composable
 fun EditNoteTopAppBarActions(
     archiveIcon: ImageVector,
-    onArchiveUnarchive: () -> Unit
+    pinIcon: ImageVector,
+    onArchiveUnarchive: () -> Unit,
+    onPinUnpin: () -> Unit
 ) {
-    IconButton(onClick = {}) {
-        Icon(Icons.Filled.PushPin, stringResource(R.string.pin_note))
+    IconButton(onClick = onPinUnpin) {
+        Icon(pinIcon, stringResource(R.string.pin_note))
     }
     IconButton(onClick = {}) {
         Icon(Icons.Filled.Notifications, stringResource(R.string.add_reminder))
