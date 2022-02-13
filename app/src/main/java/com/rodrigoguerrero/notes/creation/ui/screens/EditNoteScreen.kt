@@ -20,10 +20,8 @@ import com.rodrigoguerrero.notes.R
 import com.rodrigoguerrero.notes.common.ui.components.BackNavigationIcon
 import com.rodrigoguerrero.notes.common.ui.components.FulLScreenProgress
 import com.rodrigoguerrero.notes.common.ui.components.MainScaffold
-import com.rodrigoguerrero.notes.creation.ui.components.ColorSelectorBottomSheet
-import com.rodrigoguerrero.notes.creation.ui.components.EditNoteBottomBar
-import com.rodrigoguerrero.notes.creation.ui.components.EditNoteFields
-import com.rodrigoguerrero.notes.creation.ui.components.EditNoteTopAppBarActions
+import com.rodrigoguerrero.notes.creation.models.ReminderSuggestion
+import com.rodrigoguerrero.notes.creation.ui.components.*
 import com.rodrigoguerrero.notes.creation.viewmodels.EditNoteViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -31,7 +29,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 enum class BottomSheetType {
-    ADD, COLOR
+    COLOR, REMINDER
 }
 
 @ExperimentalMaterialApi
@@ -66,7 +64,19 @@ fun EditNoteScreen(
         sheetContent = {
             Box(Modifier.defaultMinSize(minHeight = 1.dp)) {
                 when (bottomSheetType) {
-                    BottomSheetType.ADD -> {}
+                    BottomSheetType.REMINDER -> {
+                        val laterToday = ReminderSuggestion(0L, "Later Today", "18:00")
+                        val tomorrowMorning = ReminderSuggestion(0L, "Tomorrow morning", "08:00")
+                        val sundayMorning = ReminderSuggestion(0L, "Sunday morning", "Sun 08:00")
+                        val suggestions = listOf(laterToday, tomorrowMorning, sundayMorning)
+
+                        ReminderSelectorBottomSheet(
+                            reminderSuggestions = suggestions,
+                            selectedColor = noteColor,
+                            onShowDatePicker = {},
+                            onSuggestionSelected = {}
+                        )
+                    }
                     BottomSheetType.COLOR -> {
                         ColorSelectorBottomSheet(
                             selectedColor = noteColor,
@@ -99,7 +109,11 @@ fun EditNoteScreen(
                             archiveIcon = archiveIcon,
                             onArchiveUnarchive = { viewModel.onArchiveUnarchive(noteToEdit) },
                             pinIcon = pinIcon,
-                            onPinUnpin = { viewModel.onPinUnpin(noteToEdit) }
+                            onPinUnpin = { viewModel.onPinUnpin(noteToEdit) },
+                            onAddReminder = {
+                                viewModel.setBottomSheetType(BottomSheetType.REMINDER)
+                                scope.launch { bottomSheetState.show() }
+                            }
                         )
                     },
                     title = {}
